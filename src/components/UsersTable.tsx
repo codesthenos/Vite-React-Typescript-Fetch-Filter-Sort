@@ -1,4 +1,5 @@
 import { useFilterUsers } from "../hooks/useFilterUsers.ts"
+import { HEADERS } from "../constants.ts"
 
 export function UsersTable () {
   const { filteredUsers, deleteUser, resetUsers } = useFilterUsers()
@@ -9,11 +10,9 @@ export function UsersTable () {
       <table>
         <thead>
           <tr>
-            <th>Photo</th>
-            <th>Name</th>
-            <th>Surname</th>
-            <th>Country</th>
-            <th>Delete user</th>
+            {
+              HEADERS.map(headerCell => <th key={headerCell}>{headerCell}</th>)
+            }
           </tr>
         </thead>
         
