@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react'
 import './App.css'
+import type { APIResponse, User } from './types.d.ts'
 
 function App () {
-  const [users, setUsers] = useState([])
+  const [users, setUsers] = useState<User[]>([])
 
   useEffect(() => {
     fetch('https://randomuser.me/api?results=100')
       .then(res => res.json())
-      .then(jsonData => {
+      .then((jsonData: APIResponse) => {
         setUsers(jsonData.results)
       })
-      .catch(err => {
+      .catch((err: unknown) => {
         console.error(err)
       })
 
