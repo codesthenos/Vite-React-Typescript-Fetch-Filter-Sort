@@ -1,4 +1,3 @@
-import './App.css'
 import { UsersTable } from './components/UsersTable.tsx'
 
 function App () {
