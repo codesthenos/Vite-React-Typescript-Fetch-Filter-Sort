@@ -2,7 +2,6 @@ import { useEffect, useState } from "react"
 import { useGetUsers } from "../hooks/useGetUsers.ts"
 
 export function UsersTable () {
-  console.log('UsersTable.tsx RENDER')
   const initialUsers = useGetUsers()
 
   const [filteredUsers, setFilteredUsers] = useState(initialUsers)

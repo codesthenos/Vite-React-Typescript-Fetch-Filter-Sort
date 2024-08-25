@@ -1,8 +1,6 @@
 import { UsersTable } from './components/UsersTable.tsx'
 
 function App () {
-  console.log('App.tsx RENDER')
-
   return (
     <>
       <h1>CODESTHENOS</h1>
