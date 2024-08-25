@@ -6,9 +6,25 @@ export const useFilterUsers = () => {
 
   const [filteredUsers, setFilteredUsers] = useState(initialUsers)
 
+  const [inputValue, setInputValue] = useState<string>('')
+
   useEffect(()=> {
     setFilteredUsers(initialUsers)
   }, [initialUsers])
+
+  const handleCountryFilterInput: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+    event.preventDefault()
+
+    const newInputValue = event.target.value
+
+    setInputValue(newInputValue)
+  }
+
+  useEffect(() => {
+    const newFilteredUsers = filteredUsers.filter(user => user.location.country === inputValue)
+
+    setFilteredUsers(newFilteredUsers)
+  }, [filteredUsers, inputValue])
 
   const deleteUser = (userToDeleteLoginUUID: string) => {
 
@@ -31,5 +47,5 @@ export const useFilterUsers = () => {
     setFilteredUsers(newFilteredUsers)
   }
 
-  return { filteredUsers, deleteUser, resetUsers, handleSortButton }
+  return { filteredUsers, deleteUser, resetUsers, handleSortButton, inputValue, handleCountryFilterInput }
 }
