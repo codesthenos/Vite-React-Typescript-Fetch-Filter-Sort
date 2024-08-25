@@ -1,27 +1,7 @@
-import { useEffect, useState } from "react"
-import { useGetUsers } from "../hooks/useGetUsers.ts"
+import { useFilterUsers } from "../hooks/useFilterUsers.ts"
 
 export function UsersTable () {
-  const initialUsers = useGetUsers()
-
-  const [filteredUsers, setFilteredUsers] = useState(initialUsers)
-
-  const deleteUser = (userToDeleteLoginUUID: string) => {
-
-    const newFilteredUsers = filteredUsers.filter(user => user.login.uuid !== userToDeleteLoginUUID)
-
-    setFilteredUsers(newFilteredUsers)
-  }
-
-  useEffect(()=> {
-    setFilteredUsers(initialUsers)
-  }, [initialUsers])
-
-  const resetUsers: React.MouseEventHandler = (event) => {
-    event.preventDefault()
-
-    setFilteredUsers(initialUsers)
-  }
+  const { filteredUsers, deleteUser, resetUsers } = useFilterUsers()
 
   return (
     <>
