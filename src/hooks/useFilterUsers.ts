@@ -23,5 +23,13 @@ export const useFilterUsers = () => {
     setFilteredUsers(initialUsers)
   }
 
-  return { filteredUsers, deleteUser, resetUsers }
+  const handleSortButton: React.MouseEventHandler = (event) => {
+    event.preventDefault()
+
+    const newFilteredUsers = [...filteredUsers].sort((a, b) => a.location.country.localeCompare(b.location.country))
+
+    setFilteredUsers(newFilteredUsers)
+  }
+
+  return { filteredUsers, deleteUser, resetUsers, handleSortButton }
 }
