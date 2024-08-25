@@ -1,12 +1,20 @@
-import { useFilterUsers } from "../hooks/useFilterUsers.ts"
 import { HEADERS } from "../constants.ts"
+import { useFilterUsers } from "../hooks/useFilterUsers.ts"
+import { useColorRowButton } from "../hooks/useColorRowButton.ts"
 
 export function UsersTable () {
   const { filteredUsers, deleteUser, resetUsers } = useFilterUsers()
 
+  const { isColorButtonActive, handleColorButton } = useColorRowButton()
+
   return (
     <>
-      <button onClick={resetUsers}>Reset user list</button>
+      <div style={{ display: 'flex', gap: '24px', placeContent: 'center' }}>
+        <button onClick={handleColorButton}>Color rows</button>
+
+        <button onClick={resetUsers}>Reset user list</button>
+      </div>
+
       <table>
         <thead>
           <tr>
@@ -16,7 +24,7 @@ export function UsersTable () {
           </tr>
         </thead>
         
-        <tbody>
+        <tbody className={isColorButtonActive ? 'show-colors' : ''}>
           {
             filteredUsers.map(user => (
               <tr key={user.login.uuid}>
