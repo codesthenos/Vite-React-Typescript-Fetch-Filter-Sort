@@ -1,7 +1,9 @@
 import { HEADERS } from "../constants.ts"
-import type { Props } from "../types.d.ts"
+import { useUsers } from "../hooks/useUsers.ts"
 
-export function UsersTable ({ state, dispatch }: Props) {
+export function UsersTable () {
+  const { state, dispatch } = useUsers()
+
   const deleteUser = (userLoginUUID: string) => {
     dispatch({ type: 'DELETE_ROW', payload: userLoginUUID })
   }

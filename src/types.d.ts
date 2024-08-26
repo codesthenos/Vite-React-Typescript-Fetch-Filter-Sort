@@ -109,10 +109,14 @@ export type Action =
 | { type: 'COLOR_UNCOLOR_ROWS' }
 | { type: 'SORT_UNSORT_BY_COUNTRY' }
 | { type: 'DELETE_ROW', payload: string}
-| { type: 'RESET_TO_USERS' }
+| { type: 'RECOVER_DELETES' }
 | { type: 'FILTER_USERS_BY_COUNTRY', payload: string }
 
-export interface Props {
+export interface ContextProps {
   state: State,
   dispatch: React.Dispatch<Action>
+}
+
+export interface UsersProvidersProps {
+  children: React.ReactNode
 }

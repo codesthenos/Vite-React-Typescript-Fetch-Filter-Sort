@@ -1,13 +1,14 @@
-import type { Props } from "../types.d.ts"
+import { useUsers } from "../hooks/useUsers"
 
+export function Header () {
+  const { state, dispatch } = useUsers()
 
-export function Header ({ state, dispatch }: Props) {
   const handleColorButton = () => {
     dispatch({ type: 'COLOR_UNCOLOR_ROWS' })
   }
 
   const resetUsers = () => {
-    dispatch({ type: 'RESET_TO_USERS' })
+    dispatch({ type: 'RECOVER_DELETES' })
   }
 
   const handleSortButton = () => {

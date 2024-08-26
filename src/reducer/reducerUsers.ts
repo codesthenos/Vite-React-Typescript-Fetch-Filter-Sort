@@ -46,12 +46,10 @@ export const reducer = (state: State, action: Action) => {
     }
   }
 
-  if (type === 'RESET_TO_USERS') {
+  if (type === 'RECOVER_DELETES') {
     return {
       ...state,
       filteredUsers: state.usersFetched,
-      inputValue: '',
-      isSortByCountryActive: false
     }
   }
 
