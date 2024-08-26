@@ -17,12 +17,13 @@ export const useFilterUsers = () => {
 
     const newInputValue = event.target.value
 
-    setInputValue(newInputValue)
-
-    const newFilteredUsers = filteredUsers.filter(user => user.location.country.toLowerCase().includes(inputValue))
-
-    setFilteredUsers(newFilteredUsers)
+    setInputValue(newInputValue)    
   }
+
+  useEffect(()=> {
+    const newFilteredUsers = filteredUsers.filter(user => user.location.country.toLowerCase().includes(inputValue.toLowerCase()))
+    setFilteredUsers(newFilteredUsers)
+  }, [inputValue])
 
   const deleteUser = (userToDeleteLoginUUID: string) => {
 
