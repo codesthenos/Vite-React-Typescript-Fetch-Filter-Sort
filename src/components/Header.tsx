@@ -12,7 +12,11 @@ export function Header () {
   }
 
   const handleSortButton = () => {
-    dispatch({ type: 'SORT_UNSORT_BY_COUNTRY'})
+    if (!state.isSortByCountryActive) {
+      dispatch({ type: 'SORT_BY_COUNTRY' })
+    } else {
+      dispatch({ type: 'UNSORT' })
+    }
   }
 
   const handleCountryFilterInput: React.ChangeEventHandler<HTMLInputElement> = (event) => {

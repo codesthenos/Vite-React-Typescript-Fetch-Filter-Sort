@@ -28,15 +28,22 @@ export const reducer = (state: State, action: Action) => {
     }
   }
 
-  if (type === 'SORT_UNSORT_BY_COUNTRY') {
+  if (type === 'SORT_BY_COUNTRY') {
     return {
       ...state,
       isSortByCountryActive: !state.isSortByCountryActive,
-      preSortUsers: state.filteredUsers,
-      filteredUsers: !state.isSortByCountryActive
-        ? [...state.filteredUsers].sort((a, b) =>
-          a.location.country.localeCompare(b.location.country))
-        : state.preSortUsers
+      preSortUsers: [...state.filteredUsers],
+      filteredUsers: [...state.filteredUsers].sort((a, b) =>
+        a.location.country.localeCompare(b.location.country)
+      )
+    }
+  }
+
+  if (type === 'UNSORT') {
+    return {
+      ...state,
+      isSortByCountryActive: !state.isSortByCountryActive,
+      filteredUsers: [...state.preSortUsers]
     }
   }
 
@@ -52,7 +59,8 @@ export const reducer = (state: State, action: Action) => {
   if (type === 'RECOVER_DELETES') {
     return {
       ...state,
-      filteredUsers: state.usersFetched,
+      preSortUsers: state.filteredUsers,
+      filteredUsers: state.preSortUsers
     }
   }
 
