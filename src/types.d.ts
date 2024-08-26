@@ -99,6 +99,7 @@ export interface Picture {
 export interface State {
   usersFetched: User[];
   isColorRowActive: boolean;
+  preSortUsers: User[];
   filteredUsers: User[];
   isSortByCountryActive: boolean;
   inputValue: string;

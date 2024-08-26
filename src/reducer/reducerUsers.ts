@@ -3,6 +3,7 @@ import type { State, Action } from "../types.d.ts"
 export const initialState: State = {
   usersFetched: [],
   isColorRowActive: false,
+  preSortUsers: [],
   filteredUsers: [],
   isSortByCountryActive: false,
   inputValue: ''
@@ -15,7 +16,8 @@ export const reducer = (state: State, action: Action) => {
     return {
       ...state,
       usersFetched: action.payload,
-      filteredUsers: action.payload
+      filteredUsers: action.payload,
+      preSortUsers: action.payload
     }
   }
 
@@ -30,10 +32,11 @@ export const reducer = (state: State, action: Action) => {
     return {
       ...state,
       isSortByCountryActive: !state.isSortByCountryActive,
+      preSortUsers: state.filteredUsers,
       filteredUsers: !state.isSortByCountryActive
         ? [...state.filteredUsers].sort((a, b) =>
           a.location.country.localeCompare(b.location.country))
-        : state.usersFetched
+        : state.preSortUsers
     }
   }
 
