@@ -6,6 +6,8 @@ export const useFilterUsers = () => {
 
   const [filteredUsers, setFilteredUsers] = useState(initialUsers)
 
+  const [isSortButtonActive, setIsSortButtonActive] = useState(false)
+
   const [inputValue, setInputValue] = useState<string>('')
 
   useEffect(()=> {
@@ -41,10 +43,14 @@ export const useFilterUsers = () => {
   const handleSortButton: React.MouseEventHandler = (event) => {
     event.preventDefault()
 
-    const newFilteredUsers = [...filteredUsers].sort((a, b) => a.location.country.localeCompare(b.location.country))
+    if (!isSortButtonActive) {
+      const newFilteredUsers = [...filteredUsers].sort((a, b) => a.location.country.localeCompare(b.location.country))
 
-    setFilteredUsers(newFilteredUsers)
+      setFilteredUsers(newFilteredUsers)
+    }
+
+    setIsSortButtonActive(!isSortButtonActive)
   }
 
-  return { filteredUsers, deleteUser, resetUsers, handleSortButton, inputValue, handleCountryFilterInput }
+  return { filteredUsers, deleteUser, resetUsers, handleSortButton, isSortButtonActive, inputValue, handleCountryFilterInput }
 }

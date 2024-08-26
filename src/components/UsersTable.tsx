@@ -3,7 +3,7 @@ import { useFilterUsers } from "../hooks/useFilterUsers.ts"
 import { useColorRowButton } from "../hooks/useColorRowButton.ts"
 
 export function UsersTable () {
-  const { filteredUsers, deleteUser, resetUsers, handleSortButton, inputValue, handleCountryFilterInput } = useFilterUsers()
+  const { filteredUsers, deleteUser, resetUsers, handleSortButton, isSortButtonActive, inputValue, handleCountryFilterInput } = useFilterUsers()
 
   const { isColorButtonActive, handleColorButton } = useColorRowButton()
 
@@ -14,7 +14,9 @@ export function UsersTable () {
 
         <button onClick={resetUsers}>Reset user list</button>
 
-        <button onClick={handleSortButton}>Sort by country</button>
+        <button onClick={handleSortButton}>
+          {isSortButtonActive ? 'Unsort' : 'Sort by country'}
+        </button>
 
         <input
           placeholder="Filter by country"
