@@ -70,8 +70,8 @@ export const reducer = (state: State, action: Action) => {
   if (type === 'RECOVER_DELETES') {
     return {
       ...state,
-      preSortUsers: state.filteredUsers,
-      filteredUsers: state.preSortUsers
+      filteredUsers: [...state.filteredUsers, ...state.deletedUsers],
+      deletedUsers: []
     }
   }
 
