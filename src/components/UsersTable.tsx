@@ -1,68 +1,48 @@
 import { HEADERS } from "../constants.ts"
-import { useFilterUsers } from "../hooks/useFilterUsers.ts"
-import { useColorRowButton } from "../hooks/useColorRowButton.ts"
+import type { Props } from "../types.d.ts"
 
-export function UsersTable () {
-  const { filteredUsers, deleteUser, resetUsers, handleSortButton, isSortButtonActive, inputValue, handleCountryFilterInput } = useFilterUsers()
-
-  const { isColorButtonActive, handleColorButton } = useColorRowButton()
+export function UsersTable ({ state, dispatch }: Props) {
+  const deleteUser = (userLoginUUID: string) => {
+    dispatch({ type: 'DELETE_ROW', payload: userLoginUUID })
+  }
 
   return (
-    <>
-      <div style={{ display: 'flex', gap: '24px', placeContent: 'center' }}>
-        <button onClick={handleColorButton}>Color rows</button>
-
-        <button onClick={resetUsers}>Reset user list</button>
-
-        <button onClick={handleSortButton}>
-          {isSortButtonActive ? 'Unsort' : 'Sort by country'}
-        </button>
-
-        <input
-          placeholder="Filter by country"
-          onChange={handleCountryFilterInput}
-          value={inputValue}
-        />
-      </div>
-
-      <table>
-        <thead>
-          <tr>
-            {
-              HEADERS.map(headerCell => <th key={headerCell}>{headerCell}</th>)
-            }
-          </tr>
-        </thead>
-        
-        <tbody className={isColorButtonActive ? 'show-colors' : ''}>
+    <table>
+      <thead>
+        <tr>
           {
-            filteredUsers.map(user => (
-              <tr key={user.login.uuid}>
-                <td>
-                  <img src={user.picture.thumbnail} />
-                </td>
-
-                <td>
-                  {user.name.first}
-                </td>
-
-                <td>
-                  {user.name.last}
-                </td>
-
-                <td>
-                  {user.location.country}
-                </td>
-
-                <td>
-                  <button onClick={() => { deleteUser(user.login.uuid) }}>Delete</button>
-                </td>
-              </tr>
-            ))
+            HEADERS.map(headerCell => <th key={headerCell}>{headerCell}</th>)
           }
-        </tbody>
-      </table>
-    </>
-    
+        </tr>
+      </thead>
+      
+      <tbody className={state.isColorRowActive ? 'show-colors' : ''}>
+        {
+          state.filteredUsers.map(user => (
+            <tr key={user.login.uuid}>
+              <td>
+                <img src={user.picture.thumbnail} />
+              </td>
+
+              <td>
+                {user.name.first}
+              </td>
+
+              <td>
+                {user.name.last}
+              </td>
+
+              <td>
+                {user.location.country}
+              </td>
+
+              <td>
+                <button onClick={() => { deleteUser(user.login.uuid) }}>Delete</button>
+              </td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>    
   )
 }

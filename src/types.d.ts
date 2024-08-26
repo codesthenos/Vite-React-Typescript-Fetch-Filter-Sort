@@ -95,3 +95,24 @@ export interface Picture {
   medium:    string;
   thumbnail: string;
 }
+
+export interface State {
+  usersFetched: User[];
+  isColorRowActive: boolean;
+  filteredUsers: User[];
+  isSortByCountryActive: boolean;
+  inputValue: string;
+}
+
+export type Action =
+| { type: 'SET_USERS', payload: User[] }
+| { type: 'COLOR_UNCOLOR_ROWS' }
+| { type: 'SORT_UNSORT_BY_COUNTRY' }
+| { type: 'DELETE_ROW', payload: string}
+| { type: 'RESET_TO_USERS' }
+| { type: 'FILTER_USERS_BY_COUNTRY', payload: string }
+
+export interface Props {
+  state: State,
+  dispatch: React.Dispatch<Action>
+}
