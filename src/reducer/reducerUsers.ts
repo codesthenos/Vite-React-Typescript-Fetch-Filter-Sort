@@ -5,6 +5,7 @@ export const initialState: State = {
   isColorRowActive: false,
   preSortUsers: [],
   filteredUsers: [],
+  deletedUsers:[],
   isSortByCountryActive: false,
   inputValue: ''
 }
@@ -43,14 +44,24 @@ export const reducer = (state: State, action: Action) => {
     return {
       ...state,
       isSortByCountryActive: !state.isSortByCountryActive,
-      filteredUsers: [...state.preSortUsers]
+      filteredUsers: state.preSortUsers
     }
   }
 
   if (type === 'DELETE_ROW') {
+    const userToDelete = state.filteredUsers.find(user =>
+      user.login.uuid === action.payload
+    )
+
     return {
       ...state,
       filteredUsers: state.filteredUsers.filter(user =>
+        user.login.uuid !== action.payload
+      ),
+      deletedUsers: userToDelete
+        ? [...state.deletedUsers, userToDelete]
+        : state.deletedUsers,
+      preSortUsers: state.preSortUsers.filter(user =>
         user.login.uuid !== action.payload
       )
     }

@@ -101,6 +101,7 @@ export interface State {
   isColorRowActive: boolean;
   preSortUsers: User[];
   filteredUsers: User[];
+  deletedUsers: User[];
   isSortByCountryActive: boolean;
   inputValue: string;
 }
