@@ -15,7 +15,7 @@ export function UsersTable () {
 
   const sortedUsers = useMemo(() => {
     return state.isSortByCountryActive
-      ? filteredUsers.sort((a, b) => a.location.country.localeCompare(b.location.country))
+      ? filteredUsers.toSorted((a, b) => a.location.country.localeCompare(b.location.country))
       : filteredUsers
   }, [state.fetchedUsers, state.isSortByCountryActive])
 
