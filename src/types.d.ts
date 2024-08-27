@@ -97,20 +97,17 @@ export interface Picture {
 }
 
 export interface State {
-  usersFetched: User[];
+  fetchedUsers: User[];
   isColorRowActive: boolean;
-  preSortUsers: User[];
-  filteredUsers: User[];
   deletedUsers: User[];
   isSortByCountryActive: boolean;
-  inputValue: string;
+  filterCountryValue: string;
 }
 
 export type Action =
 | { type: 'SET_USERS', payload: User[] }
 | { type: 'COLOR_UNCOLOR_ROWS' }
-| { type: 'SORT_BY_COUNTRY' }
-| { type: 'UNSORT' }
+| { type: 'SORT_UNSORT_BY_COUNTRY' }
 | { type: 'DELETE_ROW', payload: string}
 | { type: 'RECOVER_DELETES' }
 | { type: 'FILTER_USERS_BY_COUNTRY', payload: string }
