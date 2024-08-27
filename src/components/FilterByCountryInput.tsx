@@ -12,7 +12,7 @@ export function FilterByCountryInput () {
     <input
       placeholder="Filter by country"
       onChange={handleCountryFilterInput}
-      value={state.inputValue}
+      value={state.filterCountryValue}
     />
   )
 }
