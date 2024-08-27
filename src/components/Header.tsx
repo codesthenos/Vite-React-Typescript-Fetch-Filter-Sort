@@ -1,43 +1,18 @@
-import { useUsers } from "../hooks/useUsers"
+import { ColorRowButton } from "./ColorRowButton.tsx"
+import { FilterByCountryInput } from "./FilterByCountryInput.tsx"
+import { ResetDeletedButton } from "./ResetDeletedButton.tsx"
+import { SortUnsortByCountryButton } from "./SortUnsortByCountryButton.tsx"
 
 export function Header () {
-  const { state, dispatch } = useUsers()
-
-  const handleColorButton = () => {
-    dispatch({ type: 'COLOR_UNCOLOR_ROWS' })
-  }
-
-  const resetUsers = () => {
-    dispatch({ type: 'RECOVER_DELETES' })
-  }
-
-  const handleSortButton = () => {
-    if (!state.isSortByCountryActive) {
-      dispatch({ type: 'SORT_BY_COUNTRY' })
-    } else {
-      dispatch({ type: 'UNSORT' })
-    }
-  }
-
-  const handleCountryFilterInput: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-    dispatch({ type: 'FILTER_USERS_BY_COUNTRY', payload: event.target.value })
-  }
-
   return (
     <header style={{ display: 'flex', gap: '24px', placeContent: 'center' }}>
-      <button onClick={handleColorButton}>Color rows</button>
+      <ColorRowButton />
 
-      <button onClick={resetUsers}>Reset user list</button>
+      <ResetDeletedButton />
 
-      <button onClick={handleSortButton}>
-        {state.isSortByCountryActive ? 'Unsort' : 'Sort by country'}
-      </button>
+      <SortUnsortByCountryButton />
 
-      <input
-        placeholder="Filter by country"
-        onChange={handleCountryFilterInput}
-        value={state.inputValue}
-      />
+      <FilterByCountryInput />
     </header>
   )
 }
