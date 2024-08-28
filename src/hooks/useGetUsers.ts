@@ -1,26 +1,23 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import type { User, APIResponse } from "../types.d.ts"
 
 export const useGetUsers = () => {
-  const [fetchedUsers, setFetchedUsers] = useState<User[]>([])
+  const [shownUsers, setShownUsers] = useState<User[]>([])
 
-  const [shownUsers, setShownUsers] = useState([...fetchedUsers])
+  const fetchedUsers = useRef<User[]>([])
 
   useEffect(() => {
     fetch('https://randomuser.me/api?results=100')
       .then(res => res.json())
       .then((jsonData: APIResponse) => {
-        setFetchedUsers(jsonData.results)
+        fetchedUsers.current = jsonData.results
+        setShownUsers(jsonData.results)
       })
       .catch((err: unknown) => {
         console.error(err)
       })
 
   }, [])
-
-  useEffect(() => {
-    setShownUsers([...fetchedUsers])
-  }, [fetchedUsers])
 
   return { shownUsers }
 }
