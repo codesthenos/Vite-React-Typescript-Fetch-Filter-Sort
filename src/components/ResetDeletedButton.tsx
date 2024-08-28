@@ -1,7 +1,7 @@
-import { useUsers } from "../hooks/useUsers.ts"
 
 
 export function ResetDeletedButton () {
+  const resetUsers = () => {}
 
   return (
     <button onClick={resetUsers}>

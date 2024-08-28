@@ -1,10 +1,15 @@
-import { useUsers } from "../hooks/useUsers.ts"
-
+import { useState } from "react"
 
 export function SortUnsortByCountryButton () {
+  const [sortByCountryButtonActive, setSortByCountryButton] = useState(false)
+
+  const handleSortButton = () => {
+    setSortByCountryButton(!sortByCountryButtonActive)
+  }
+
   return (
     <button onClick={handleSortButton}>
-      {state.isSortByCountryActive ? 'Unsort' : 'Sort by country'}
+      {sortByCountryButtonActive ? 'Unsort' : 'Sort by country'}
     </button>
   )
 }

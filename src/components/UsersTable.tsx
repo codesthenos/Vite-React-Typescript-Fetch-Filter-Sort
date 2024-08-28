@@ -1,9 +1,10 @@
-import { useMemo } from "react"
-
+//Constants
 import { HEADERS } from "../constants.ts"
-import { useUsers } from "../hooks/useUsers.ts"
+//Custom hook to get the fetched array of users 
+import { useGetUsers } from "../hooks/useGetUsers.ts"
 
 export function UsersTable () {
+  const fetchedUsers = useGetUsers()
 
   return (
     <table>
@@ -15,9 +16,9 @@ export function UsersTable () {
         </tr>
       </thead>
       
-      <tbody className={state.isColorRowActive ? 'show-colors' : ''}>
+      <tbody className={false ? 'show-colors' : ''}>
         {
-          sortedUsers.map(user => (
+          fetchedUsers.map(user => (
             <tr key={user.login.uuid}>
               <td>
                 <img src={user.picture.thumbnail} />
@@ -36,7 +37,7 @@ export function UsersTable () {
               </td>
 
               <td>
-                <button onClick={() => { deleteUser(user.login.uuid) }}>Delete</button>
+                <button onClick={() => {}}>Delete</button>
               </td>
             </tr>
           ))

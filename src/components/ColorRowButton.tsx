@@ -1,11 +1,16 @@
-import { useUsers } from "../hooks/useUsers.ts"
+import { useState } from "react"
 
 
 export function ColorRowButton () {
+  const [colorRowButtonActive, setColorRowButton] = useState(false)
+
+  const handleColorButton = () => {
+    setColorRowButton(!colorRowButtonActive)
+  }
 
   return (
     <button onClick={handleColorButton}>
-      {state.isColorRowActive ? 'Remove colors' : 'Color rows'}
+      {colorRowButtonActive ? 'Remove colors' : 'Color rows'}
     </button>
   )
 }
