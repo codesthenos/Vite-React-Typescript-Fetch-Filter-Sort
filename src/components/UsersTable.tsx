@@ -4,24 +4,6 @@ import { HEADERS } from "../constants.ts"
 import { useUsers } from "../hooks/useUsers.ts"
 
 export function UsersTable () {
-  const { state, dispatch } = useUsers()
-
-  const filteredUsers = useMemo(() => {
-    return state.filterCountryValue
-      ? state.fetchedUsers.filter(user =>
-        user.location.country.toLowerCase().includes(state.filterCountryValue.toLowerCase()))
-      : state.fetchedUsers
-  }, [state.fetchedUsers, state.filterCountryValue])
-
-  const sortedUsers = useMemo(() => {
-    return state.isSortByCountryActive
-      ? filteredUsers.toSorted((a, b) => a.location.country.localeCompare(b.location.country))
-      : filteredUsers
-  }, [state.fetchedUsers, state.isSortByCountryActive])
-
-  const deleteUser = (userLoginUUID: string) => {
-    dispatch({ type: 'DELETE_ROW', payload: userLoginUUID })
-  }
 
   return (
     <table>
