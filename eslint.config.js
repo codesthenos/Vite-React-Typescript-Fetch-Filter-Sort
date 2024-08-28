@@ -69,8 +69,6 @@ export default tseslint.config({
       prefer: 'type-imports',
       disallowTypeAnnotations: false,
     }],
-    '@typescript-eslint/no-unnecessary-condition': ['error', {
-      allowLiteralBooleanExpressions: true,
-    }],
+    '@typescript-eslint/no-unnecessary-condition': 'off',
   },
 })

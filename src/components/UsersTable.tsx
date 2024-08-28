@@ -1,11 +1,13 @@
 //Constants
 import { HEADERS } from "../constants.ts"
+import { useUsersContext } from "../context/useUsersContext.tsx"
 //Custom hook to get the array of users that will be shown
 import { useGetUsers } from "../hooks/useGetUsers.ts"
 
 export function UsersTable () {
+  const { isColorActive } = useUsersContext()
   const { shownUsers } = useGetUsers()
-
+  
   return (
     <table>
       <thead>
@@ -16,7 +18,7 @@ export function UsersTable () {
         </tr>
       </thead>
       
-      <tbody className={false ? 'show-colors' : ''}>
+      <tbody className={isColorActive ? 'show-colors' : ''}>
         {
           shownUsers.map(user => (
             <tr key={user.login.uuid}>

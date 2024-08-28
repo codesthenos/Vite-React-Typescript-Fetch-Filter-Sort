@@ -1,16 +1,11 @@
-import { useState } from "react"
-
+import { useUsersContext } from "../context/useUsersContext"
 
 export function ColorRowButton () {
-  const [colorRowButtonActive, setColorRowButton] = useState(false)
-
-  const handleColorButton = () => {
-    setColorRowButton(!colorRowButtonActive)
-  }
+  const { isColorActive, toggleColors } = useUsersContext()
 
   return (
-    <button onClick={handleColorButton}>
-      {colorRowButtonActive ? 'Remove colors' : 'Color rows'}
+    <button onClick={toggleColors}>
+      {isColorActive ? 'Remove colors' : 'Color rows'}
     </button>
   )
 }

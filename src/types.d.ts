@@ -97,26 +97,26 @@ export interface Picture {
 }
 
 export interface State {
-  fetchedUsers: User[];
-  isColorRowActive: boolean;
-  deletedUsers: User[];
-  isSortByCountryActive: boolean;
-  filterCountryValue: string;
+  // fetchedUsers: User[];
+  isColorActive: boolean;
+  // deletedUsers: User[];
+  // isSortByCountryActive: boolean;
+  // filterCountryValue: string;
 }
 
 export type Action =
-| { type: 'SET_USERS', payload: User[] }
-| { type: 'COLOR_UNCOLOR_ROWS' }
-| { type: 'SORT_UNSORT_BY_COUNTRY' }
-| { type: 'DELETE_ROW', payload: string}
-| { type: 'RECOVER_DELETES' }
-| { type: 'FILTER_USERS_BY_COUNTRY', payload: string }
+// | { type: 'SET_USERS', payload: User[] }
+| { type: 'SET_COLORS' }
+// | { type: 'SORT_UNSORT_BY_COUNTRY' }
+// | { type: 'DELETE_ROW', payload: string}
+// | { type: 'RECOVER_DELETES' }
+// | { type: 'FILTER_USERS_BY_COUNTRY', payload: string }
 
 export interface ContextProps {
   state: State,
   dispatch: React.Dispatch<Action>
 }
 
-export interface UsersProvidersProps {
+export interface UsersProviderProps {
   children: React.ReactNode
 }
