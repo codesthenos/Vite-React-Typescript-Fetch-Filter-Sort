@@ -1,10 +1,10 @@
 //Constants
 import { HEADERS } from "../constants.ts"
 //Custom hook to get the array of users that will be shown
-import { useUsers } from "../hooks/useUsers.ts"
+import { useGetUsers } from "../hooks/useGetUsers.ts"
 
 export function UsersTable () {
-  const { shownUsers } = useUsers()
+  const { shownUsers } = useGetUsers()
 
   return (
     <table>
