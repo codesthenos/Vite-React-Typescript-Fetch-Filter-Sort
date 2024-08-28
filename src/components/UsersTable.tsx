@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react"
 //Constants
 import { HEADERS } from "../constants.ts"
 //Custom hook to get the fetched array of users 
@@ -5,6 +6,16 @@ import { useGetUsers } from "../hooks/useGetUsers.ts"
 
 export function UsersTable () {
   const fetchedUsers = useGetUsers()
+
+  const [usersShown, setUsersShown] = useState([...fetchedUsers])
+
+  useEffect(() => {
+    setUsersShown([...fetchedUsers])
+  }, [fetchedUsers])
+
+  const getUsers = () => { setUsersShown(usersShown)}
+
+  console.log('FETCHED:', fetchedUsers, '\nSHOWN:', usersShown)
 
   return (
     <table>
@@ -18,7 +29,7 @@ export function UsersTable () {
       
       <tbody className={false ? 'show-colors' : ''}>
         {
-          fetchedUsers.map(user => (
+          usersShown.map(user => (
             <tr key={user.login.uuid}>
               <td>
                 <img src={user.picture.thumbnail} />
