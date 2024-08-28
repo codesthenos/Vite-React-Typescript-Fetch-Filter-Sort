@@ -100,21 +100,22 @@ export interface State {
   shownUsers: User[];
   isColorActive: boolean;
   // deletedUsers: User[];
-  // isSortByCountryActive: boolean;
+  isSortByCountryActive: boolean;
   // filterCountryValue: string;
 }
 
 export type Action =
 | { type: 'SET_FETCHED_USERS', payload: User[] }
 | { type: 'SET_COLORS' }
-// | { type: 'SORT_UNSORT_BY_COUNTRY' }
+| { type: 'SORT_UNSORT_BY_COUNTRY', payload: User[] }
 // | { type: 'DELETE_ROW', payload: string}
 // | { type: 'RECOVER_DELETES' }
 // | { type: 'FILTER_USERS_BY_COUNTRY', payload: string }
 
 export interface ContextProps {
   state: State,
-  dispatch: React.Dispatch<Action>
+  dispatch: React.Dispatch<Action>,
+  fetchedUsers: User[]
 }
 
 export interface UsersProviderProps {

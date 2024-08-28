@@ -6,15 +6,21 @@ export const useUsersContext = () => {
 
   if (!usersContext) throw new Error('useUsersContext must be used within a UsersProvider')
   
-  const { state, dispatch } = usersContext
+  const { state, dispatch, fetchedUsers } = usersContext
 
   const toggleColors = () => {
     dispatch({ type: 'SET_COLORS' })
   }
 
+  const toggleSortByCountry = () => {
+    dispatch({ type: 'SORT_UNSORT_BY_COUNTRY', payload: fetchedUsers })
+  }
+
   return {
     shownUsers: state.shownUsers,
     isColorActive: state.isColorActive,
-    toggleColors
+    toggleColors,
+    isSortByCountryActive: state.isSortByCountryActive,
+    toggleSortByCountry
   }
 }

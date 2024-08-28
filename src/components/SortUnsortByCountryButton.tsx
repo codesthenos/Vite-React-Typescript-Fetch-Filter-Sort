@@ -1,15 +1,11 @@
-import { useState } from "react"
+import { useUsersContext } from "../context/useUsersContext"
 
 export function SortUnsortByCountryButton () {
-  const [sortByCountryButtonActive, setSortByCountryButton] = useState(false)
-
-  const handleSortButton = () => {
-    setSortByCountryButton(!sortByCountryButtonActive)
-  }
+  const { isSortByCountryActive, toggleSortByCountry } = useUsersContext()
 
   return (
-    <button onClick={handleSortButton}>
-      {sortByCountryButtonActive ? 'Unsort' : 'Sort by country'}
+    <button onClick={toggleSortByCountry}>
+      {isSortByCountryActive ? 'Unsort' : 'Sort by country'}
     </button>
   )
 }

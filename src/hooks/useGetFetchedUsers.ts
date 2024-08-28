@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import type { User, APIResponse } from "../types"
 
-export const useGetUsers = () => {
+export const useGetFetchedUsers = () => {
   const [fetchedUsers, setFetchedUsers] = useState<User[]>([])
 
   useEffect(() => {
@@ -9,6 +9,7 @@ export const useGetUsers = () => {
       .then(res => res.json())
       .then((jsonData: APIResponse) => {
         setFetchedUsers(jsonData.results)
+
       })
       .catch((err: unknown) => {
         console.error(err)
