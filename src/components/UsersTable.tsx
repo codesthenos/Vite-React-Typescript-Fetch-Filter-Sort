@@ -1,12 +1,10 @@
 //Constants
 import { HEADERS } from "../constants.ts"
-import { useUsersContext } from "../context/useUsersContext.tsx"
-//Custom hook to get the array of users that will be shown
-import { useGetUsers } from "../hooks/useGetUsers.ts"
+//Context
+import { useUsersContext } from "../context/useUsersContext.ts"
 
 export function UsersTable () {
-  const { isColorActive } = useUsersContext()
-  const { shownUsers } = useGetUsers()
+  const { shownUsers, isColorActive } = useUsersContext()
   
   return (
     <table>

@@ -13,6 +13,7 @@ export const useUsersContext = () => {
   }
 
   return {
+    shownUsers: state.shownUsers,
     isColorActive: state.isColorActive,
     toggleColors
   }

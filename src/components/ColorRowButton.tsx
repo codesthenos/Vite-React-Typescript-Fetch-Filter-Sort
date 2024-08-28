@@ -1,4 +1,5 @@
-import { useUsersContext } from "../context/useUsersContext"
+//Context
+import { useUsersContext } from "../context/useUsersContext.ts"
 
 export function ColorRowButton () {
   const { isColorActive, toggleColors } = useUsersContext()
