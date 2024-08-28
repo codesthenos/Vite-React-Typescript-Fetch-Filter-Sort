@@ -108,7 +108,7 @@ export type Action =
 | { type: 'SET_FETCHED_USERS', payload: User[] }
 | { type: 'SET_COLORS' }
 | { type: 'SORT_UNSORT_BY_COUNTRY', payload: User[] }
-// | { type: 'DELETE_ROW', payload: string}
+| { type: 'DELETE_ROW', payload: string}
 // | { type: 'RECOVER_DELETES' }
 // | { type: 'FILTER_USERS_BY_COUNTRY', payload: string }
 

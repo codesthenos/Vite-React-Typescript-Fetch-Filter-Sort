@@ -16,11 +16,16 @@ export const useUsersContext = () => {
     dispatch({ type: 'SORT_UNSORT_BY_COUNTRY', payload: fetchedUsers })
   }
 
+  const deleteUser = (userLoginUUID: string) => {
+    dispatch({ type: 'DELETE_ROW', payload: userLoginUUID })
+  }
+
   return {
     shownUsers: state.shownUsers,
     isColorActive: state.isColorActive,
     toggleColors,
     isSortByCountryActive: state.isSortByCountryActive,
-    toggleSortByCountry
+    toggleSortByCountry,
+    deleteUser
   }
 }

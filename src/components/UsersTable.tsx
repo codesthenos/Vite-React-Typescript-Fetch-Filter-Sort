@@ -4,7 +4,7 @@ import { HEADERS } from "../constants.ts"
 import { useUsersContext } from "../context/useUsersContext.ts"
 
 export function UsersTable () {
-  const { shownUsers, isColorActive } = useUsersContext()
+  const { shownUsers, isColorActive, deleteUser } = useUsersContext()
   
   return (
     <table>
@@ -37,7 +37,7 @@ export function UsersTable () {
               </td>
 
               <td>
-                <button onClick={() => {}}>Delete</button>
+                <button onClick={() => { deleteUser(user.login.uuid) }}>Delete</button>
               </td>
             </tr>
           ))

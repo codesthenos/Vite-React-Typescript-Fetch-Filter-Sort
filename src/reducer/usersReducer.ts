@@ -34,5 +34,13 @@ export const usersReducer = (state: State, action: Action) => {
     }
   }
 
+  if (action.type === 'DELETE_ROW') {
+    return {
+      ...state,
+      shownUsers: [...state.shownUsers].filter((user) =>
+        user.login.uuid !== action.payload)
+    }
+  }
+
   return state
 }
