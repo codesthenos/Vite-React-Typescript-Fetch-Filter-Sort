@@ -1,6 +1,5 @@
 import { useState } from "react"
 
-
 export function FilterByCountryInput () {
   const [filterCountryInputvalue, setFilterCountryInputvalue] = useState('')
 

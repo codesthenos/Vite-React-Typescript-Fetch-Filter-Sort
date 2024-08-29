@@ -6,14 +6,14 @@ export const useUsersContext = () => {
 
   if (!usersContext) throw new Error('useUsersContext must be used within a UsersProvider')
   
-  const { state, dispatch, fetchedUsers } = usersContext
+  const { state, dispatch } = usersContext
 
   const toggleColors = () => {
     dispatch({ type: 'SET_COLORS' })
   }
 
   const toggleSortByCountry = () => {
-    dispatch({ type: 'SORT_UNSORT_BY_COUNTRY', payload: fetchedUsers })
+    dispatch({ type: 'SORT_UNSORT_BY_COUNTRY' })
   }
 
   const deleteUser = (userLoginUUID: string) => {
