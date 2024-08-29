@@ -32,20 +32,26 @@ export const usersReducer = (state: State, action: Action) => {
       ...state,
       isSortByCountryActive: !state.isSortByCountryActive,
       shownUsers: !state.isSortByCountryActive
-        ? getSortedUsers(getUsersNotDeleted(state))
-        : getUsersNotDeleted(state)
+        ? getSortedUsers(getUsersNotDeleted(state.fetchedUsers, state.deletedUsers))
+        : getUsersNotDeleted(state.fetchedUsers, state.deletedUsers)
     }
   }
 
   if (action.type === 'DELETE_ROW') {
+    const userDeleted = state.fetchedUsers.find(user =>
+      user.login.uuid === action.payload
+    )
+
+    const usersDeleted = userDeleted
+      ? [...state.deletedUsers, userDeleted]
+      : state.deletedUsers
+
     return {
       ...state,
+      deletedUsers: usersDeleted,
       shownUsers: state.isSortByCountryActive
-        ? getSortedUsers(upadated)
-        : upadated,
-      deletedUsers: deletedUsers
-        ? [...state.deletedUsers, deletedUsers]
-        : state.deletedUsers
+        ? getSortedUsers(getUsersNotDeleted(state.fetchedUsers, usersDeleted))
+        : getUsersNotDeleted(state.fetchedUsers, usersDeleted)
     }
   }
 

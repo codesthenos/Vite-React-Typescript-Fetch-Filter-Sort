@@ -1,8 +1,8 @@
-import type { State, User } from "../types"
+import type { User } from "../types.d.ts"
 
-export const getUsersNotDeleted = (state: State) =>
-  state.fetchedUsers.filter(user =>
-    !state.deletedUsers.includes(user)
+export const getUsersNotDeleted = (fetchedUsers: User[], deletedUsers: User[]) =>
+  fetchedUsers.filter(user =>
+    !deletedUsers?.includes(user)
   )
 
 export const getSortedUsers = (users: User[]) =>
