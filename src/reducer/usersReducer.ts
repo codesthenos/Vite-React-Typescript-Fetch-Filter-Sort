@@ -47,9 +47,12 @@ export const usersReducer = (state: State, action: Action) => {
   }
 
   if (action.type === 'RECOVER_DELETES') {
+    const sortedUsers = [...state.fetchedUsers].sort((a, b) =>
+      a.location.country.localeCompare(b.location.country))
+
     return {
       ...state,
-      shownUsers: [...state.fetchedUsers]
+      shownUsers: !state.isSortByCountryActive ? [...state.fetchedUsers] : sortedUsers
     }
   }
 
