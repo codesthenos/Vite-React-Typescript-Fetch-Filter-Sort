@@ -66,13 +66,9 @@ export const usersReducer = (state: State, action: Action) => {
   }
 
   if (action.type === 'FILTER_USERS_BY_COUNTRY') {
-    const filteredUsers = getFilteredUsers(state)
     return {
       ...state,
-      filterCountryValue: action.payload,
-      shownUsers: state.isSortByCountryActive
-        ? getSortedUsers(filteredUsers)
-        : filteredUsers
+      filterCountryValue: action.payload
     }
   }
 
