@@ -24,6 +24,10 @@ export const useUsersContext = () => {
     dispatch({ type: 'RECOVER_DELETES' })
   }
 
+  const handleFilterCountryInput: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+    dispatch({ type: 'FILTER_USERS_BY_COUNTRY', payload: event.target.value })
+  }
+
   return {
     shownUsers: state.shownUsers,
     isColorActive: state.isColorActive,
@@ -31,6 +35,8 @@ export const useUsersContext = () => {
     isSortByCountryActive: state.isSortByCountryActive,
     toggleSortByCountry,
     deleteUser,
-    recoverDeletes
+    recoverDeletes,
+    filterCountryValue: state.filterCountryValue,
+    handleFilterCountryInput
   }
 }

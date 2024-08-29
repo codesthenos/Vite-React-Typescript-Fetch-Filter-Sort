@@ -4,7 +4,8 @@ export const usersInitialState: State = {
   fetchedUsers: [],
   shownUsers: [],
   isColorActive: false,
-  isSortByCountryActive: false
+  isSortByCountryActive: false,
+  filterCountryValue: ''
 }
 
 export const usersReducer = (state: State, action: Action) => {
@@ -53,6 +54,13 @@ export const usersReducer = (state: State, action: Action) => {
     return {
       ...state,
       shownUsers: !state.isSortByCountryActive ? [...state.fetchedUsers] : sortedUsers
+    }
+  }
+
+  if (action.type === 'FILTER_USERS_BY_COUNTRY') {
+    return {
+      ...state,
+      filterCountryValue: action.payload
     }
   }
 

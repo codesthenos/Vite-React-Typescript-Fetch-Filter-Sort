@@ -101,7 +101,7 @@ export interface State {
   shownUsers: User[];
   isColorActive: boolean;
   isSortByCountryActive: boolean;
-  // filterCountryValue: string;
+  filterCountryValue: string;
 }
 
 export type Action =
@@ -110,7 +110,7 @@ export type Action =
 | { type: 'SORT_UNSORT_BY_COUNTRY' }
 | { type: 'DELETE_ROW', payload: string}
 | { type: 'RECOVER_DELETES' }
-// | { type: 'FILTER_USERS_BY_COUNTRY', payload: string }
+| { type: 'FILTER_USERS_BY_COUNTRY', payload: string }
 
 export interface ContextProps {
   state: State,

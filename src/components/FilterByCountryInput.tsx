@@ -1,17 +1,13 @@
-import { useState } from "react"
+import { useUsersContext } from "../context/useUsersContext.ts"
 
 export function FilterByCountryInput () {
-  const [filterCountryInputvalue, setFilterCountryInputvalue] = useState('')
-
-  const handleCountryFilterInput: React.ChangeEventHandler<HTMLInputElement> | undefined = (e) => {
-    setFilterCountryInputvalue(e.target.value)
-  }
+  const { filterCountryValue, handleFilterCountryInput } = useUsersContext()
 
   return (
     <input
       placeholder="Filter by country"
-      onChange={handleCountryFilterInput}
-      value={filterCountryInputvalue}
+      onChange={handleFilterCountryInput}
+      value={filterCountryValue}
     />
   )
 }
