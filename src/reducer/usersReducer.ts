@@ -40,20 +40,22 @@ export const usersReducer = (state: State, action: Action) => {
   }
 
   if (action.type === 'DELETE_ROW') {
-    const userDeleted = state.fetchedUsers.find(user =>
+    const userDeleted = state.shownUsers.find(user =>
       user.login.uuid === action.payload
     )
 
-    const usersDeleted = userDeleted
+    const updatedDeletedUsers = userDeleted
       ? [...state.deletedUsers, userDeleted]
       : state.deletedUsers
 
+    const filteredUsers = getFilteredUsers(getUsersNotDeleted(state.fetchedUsers, updatedDeletedUsers), state.filterCountryValue)
+
     return {
       ...state,
-      deletedUsers: usersDeleted,
+      deletedUsers: updatedDeletedUsers,
       shownUsers: state.isSortByCountryActive
-        ? getSortedUsers(getUsersNotDeleted(state.fetchedUsers, usersDeleted))
-        : getUsersNotDeleted(state.fetchedUsers, usersDeleted)
+        ? getSortedUsers(filteredUsers)
+        : filteredUsers
     }
   }
 
