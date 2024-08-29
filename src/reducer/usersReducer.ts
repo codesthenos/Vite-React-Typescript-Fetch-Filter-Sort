@@ -57,11 +57,11 @@ export const usersReducer = (state: State, action: Action) => {
 
   if (action.type === 'RECOVER_DELETES') {
     return {
-      ...state,
+      ...state, 
+      deletedUsers: [],
       shownUsers: state.isSortByCountryActive
-        ? getSortedUsers(combinedUsers)
-        : combinedUsers,
-      deletedUsers: []
+        ? getSortedUsers(state.fetchedUsers)
+        : state.fetchedUsers
     }
   }
 
