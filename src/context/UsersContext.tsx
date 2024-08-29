@@ -19,7 +19,7 @@ export const UsersProvider: React.FC<UsersProviderProps> = ({ children }) => {
   }, [fetchedUsers])
 
   return (
-    <UsersContext.Provider value={{ state, dispatch, fetchedUsers }}>
+    <UsersContext.Provider value={{ state, dispatch }}>
       {children}
     </UsersContext.Provider>
   )

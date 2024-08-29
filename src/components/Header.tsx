@@ -1,4 +1,5 @@
 import { ColorRowButton } from "./ColorRowButton.tsx"
+import { ResetDeletedButton } from "./ResetDeletedButton.tsx"
 //import { FilterByCountryInput } from "./FilterByCountryInput.tsx"
 //import { ResetDeletedButton } from "./ResetDeletedButton.tsx"
 import { SortUnsortByCountryButton } from "./SortUnsortByCountryButton.tsx"
@@ -9,6 +10,8 @@ export function Header () {
       <ColorRowButton />
 
       <SortUnsortByCountryButton />
+
+      <ResetDeletedButton />
     </header>
   )
 }

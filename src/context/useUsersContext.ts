@@ -20,12 +20,17 @@ export const useUsersContext = () => {
     dispatch({ type: 'DELETE_ROW', payload: userLoginUUID })
   }
 
+  const recoverDeletes = () => {
+    dispatch({ type: 'RECOVER_DELETES' })
+  }
+
   return {
     shownUsers: state.shownUsers,
     isColorActive: state.isColorActive,
     toggleColors,
     isSortByCountryActive: state.isSortByCountryActive,
     toggleSortByCountry,
-    deleteUser
+    deleteUser,
+    recoverDeletes
   }
 }

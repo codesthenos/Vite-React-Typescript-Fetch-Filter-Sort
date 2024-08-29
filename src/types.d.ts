@@ -109,13 +109,12 @@ export type Action =
 | { type: 'SET_COLORS' }
 | { type: 'SORT_UNSORT_BY_COUNTRY' }
 | { type: 'DELETE_ROW', payload: string}
-// | { type: 'RECOVER_DELETES' }
+| { type: 'RECOVER_DELETES' }
 // | { type: 'FILTER_USERS_BY_COUNTRY', payload: string }
 
 export interface ContextProps {
   state: State,
-  dispatch: React.Dispatch<Action>,
-  fetchedUsers: User[]
+  dispatch: React.Dispatch<Action>
 }
 
 export interface UsersProviderProps {

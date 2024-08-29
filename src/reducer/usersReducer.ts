@@ -46,5 +46,12 @@ export const usersReducer = (state: State, action: Action) => {
     }
   }
 
+  if (action.type === 'RECOVER_DELETES') {
+    return {
+      ...state,
+      shownUsers: [...state.fetchedUsers]
+    }
+  }
+
   return state
 }
