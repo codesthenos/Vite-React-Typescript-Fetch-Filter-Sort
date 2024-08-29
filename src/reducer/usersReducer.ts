@@ -58,9 +58,14 @@ export const usersReducer = (state: State, action: Action) => {
   }
 
   if (action.type === 'FILTER_USERS_BY_COUNTRY') {
+    const filteredUsers = state.filterCountryValue
+      ? [...state.shownUsers].filter(user =>
+        user.location.country.toLowerCase().includes(state.filterCountryValue.toLowerCase()))
+      : [...state.shownUsers]
     return {
       ...state,
-      filterCountryValue: action.payload
+      filterCountryValue: action.payload,
+      shownUsers: filteredUsers
     }
   }
 
