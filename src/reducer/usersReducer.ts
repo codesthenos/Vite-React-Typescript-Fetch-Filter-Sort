@@ -1,8 +1,12 @@
 import type { Action, State } from "../types.d.ts"
+//Selectors
+import { getSortedUsers, getFilteredUsers } from "../selectors/usersSelectors.ts"
 
 export const usersInitialState: State = {
   fetchedUsers: [],
+  readyToShowUsers: [],
   shownUsers: [],
+  deletedUsers: [],
   isColorActive: false,
   isSortByCountryActive: false,
   filterCountryValue: ''
@@ -13,6 +17,7 @@ export const usersReducer = (state: State, action: Action) => {
     return {
       ...state,
       fetchedUsers: action.payload,
+      readyToShowUsers: action.payload,
       shownUsers: action.payload
     }
   }
@@ -25,47 +30,62 @@ export const usersReducer = (state: State, action: Action) => {
   }
 
   if (action.type === 'SORT_UNSORT_BY_COUNTRY') {
-    const sortedUsers = [...state.shownUsers].sort((a, b) => 
-      a.location.country.localeCompare(b.location.country))
-
-    const unSortedUsers = [...state.fetchedUsers].filter(originalUser =>
-      state.shownUsers.some(shownUser => shownUser.login.uuid === originalUser.login.uuid)
-    )
-
     return {
       ...state,
       isSortByCountryActive: !state.isSortByCountryActive,
-      shownUsers: !state.isSortByCountryActive ? sortedUsers : unSortedUsers
+      shownUsers: !state.isSortByCountryActive
+        ? getSortedUsers(state.readyToShowUsers)
+        : state.readyToShowUsers
     }
   }
 
   if (action.type === 'DELETE_ROW') {
+    const upadatedReadyToShowUsers = state.readyToShowUsers.filter(user =>
+      user.login.uuid !== action.payload
+    )
+
+    const deletedUsers = state.readyToShowUsers.find(user =>
+      user.login.uuid === action.payload
+    )
+
     return {
       ...state,
-      shownUsers: [...state.shownUsers].filter((user) =>
-        user.login.uuid !== action.payload)
+      readyToShowUsers: upadatedReadyToShowUsers,
+      shownUsers: state.isSortByCountryActive
+        ? getSortedUsers(upadatedReadyToShowUsers)
+        : upadatedReadyToShowUsers,
+      deletedUsers: deletedUsers
+        ? [...state.deletedUsers, deletedUsers]
+        : state.deletedUsers
     }
   }
 
   if (action.type === 'RECOVER_DELETES') {
-    const sortedUsers = [...state.fetchedUsers].sort((a, b) =>
-      a.location.country.localeCompare(b.location.country))
+    const recoveredUsers = state.deletedUsers.filter(deletedUser => 
+      !state.readyToShowUsers.some(user =>
+        user.login.uuid === deletedUser.login.uuid)
+    )
+
+    const combinedUsers = [...state.shownUsers, ...recoveredUsers]
 
     return {
       ...state,
-      shownUsers: !state.isSortByCountryActive ? [...state.fetchedUsers] : sortedUsers
+      readyToShowUsers: combinedUsers,
+      shownUsers: state.isSortByCountryActive
+        ? getSortedUsers(combinedUsers)
+        : combinedUsers,
+      deletedUsers: []
     }
   }
 
   if (action.type === 'FILTER_USERS_BY_COUNTRY') {
-    const filteredUsers = state.filterCountryValue
-      ? [...state.shownUsers].filter(user =>
-        user.location.country.toLowerCase().includes(state.filterCountryValue.toLowerCase()))
-      : [...state.shownUsers]
+    const filteredUsers = getFilteredUsers(state)
     return {
       ...state,
       filterCountryValue: action.payload,
-      shownUsers: filteredUsers
+      shownUsers: state.isSortByCountryActive
+        ? getSortedUsers(filteredUsers)
+        : filteredUsers
     }
   }
 

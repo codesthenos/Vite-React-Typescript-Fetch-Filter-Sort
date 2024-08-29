@@ -98,7 +98,9 @@ export interface Picture {
 
 export interface State {
   fetchedUsers: User[];
+  readyToShowUsers: User[];
   shownUsers: User[];
+  deletedUsers: User[];
   isColorActive: boolean;
   isSortByCountryActive: boolean;
   filterCountryValue: string;
