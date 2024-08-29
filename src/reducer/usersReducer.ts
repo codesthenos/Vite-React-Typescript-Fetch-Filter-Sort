@@ -1,6 +1,6 @@
 import type { Action, State } from "../types.d.ts"
 //Selectors
-import { getSortedUsers, getUsersNotDeleted } from "../selectors/usersSelectors.ts"
+import { getFilteredUsers, getSortedUsers, getUsersNotDeleted } from "../selectors/usersSelectors.ts"
 
 export const usersInitialState: State = {
   fetchedUsers: [],
@@ -28,12 +28,14 @@ export const usersReducer = (state: State, action: Action) => {
   }
 
   if (action.type === 'SORT_UNSORT_BY_COUNTRY') {
+    const filteredUsers = getFilteredUsers(getUsersNotDeleted(state.fetchedUsers, state.deletedUsers), state.filterCountryValue)
+    
     return {
       ...state,
       isSortByCountryActive: !state.isSortByCountryActive,
       shownUsers: !state.isSortByCountryActive
-        ? getSortedUsers(getUsersNotDeleted(state.fetchedUsers, state.deletedUsers))
-        : getUsersNotDeleted(state.fetchedUsers, state.deletedUsers)
+        ? getSortedUsers(filteredUsers)
+        : filteredUsers
     }
   }
 
@@ -56,19 +58,25 @@ export const usersReducer = (state: State, action: Action) => {
   }
 
   if (action.type === 'RECOVER_DELETES') {
+    const filteredUsers = getFilteredUsers(state.fetchedUsers, state.filterCountryValue)
     return {
       ...state, 
       deletedUsers: [],
       shownUsers: state.isSortByCountryActive
-        ? getSortedUsers(state.fetchedUsers)
-        : state.fetchedUsers
+        ? getSortedUsers(filteredUsers)
+        : filteredUsers
     }
   }
 
   if (action.type === 'FILTER_USERS_BY_COUNTRY') {
+    const filteredUsers = getFilteredUsers(getUsersNotDeleted(state.fetchedUsers, state.deletedUsers), action.payload)
+
     return {
       ...state,
-      filterCountryValue: action.payload
+      filterCountryValue: action.payload,
+      shownUsers: state.isSortByCountryActive
+        ? getSortedUsers(filteredUsers)
+        : filteredUsers
     }
   }
 

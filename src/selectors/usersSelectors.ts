@@ -10,6 +10,12 @@ export const getSortedUsers = (users: User[]) =>
     a.location.country.localeCompare(b.location.country)
   )
 
+export const getFilteredUsers = (usersNotDeleted: User[], inputValue: string) =>
+  usersNotDeleted.filter(user =>
+    user.location.country.toLowerCase()
+      .includes(inputValue.toLowerCase())
+  )
+
 /*
 export const getFilteredUsers = (state: State) => {
   const { filterCountryValue } = state
