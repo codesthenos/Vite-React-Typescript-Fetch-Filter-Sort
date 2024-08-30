@@ -1,5 +1,9 @@
 # Prueba técnica con TypeScript y React
 
+La configuracion del linter parte de la base de la configuracion default de vite, pero con algunas normas incluidas para que se parezca un poco a standard
+
+Partiendo del video de midudev, dejo de verlo casi al principio y a base de pensar, buscar en google, hablar con chat gpt, mirar su repo y la web resultado, termino con este 'clon' que se comporta igual, salvo que ademas de ordenar usando las cabeceras tambien desordena, pero la estructura es completamente distinta usando reducer nativo de React y contexto, sin pasar ni una prop, ni uso el useRef, uso un useState que maneja el estado del fetch incial
+
 Esto es una prueba técnica de una empresa europea para un sueldo de 55000 €/anuales.
 
 El objetivo de esta prueba técnica es crear una aplicación similar a la que se proporciona en este enlace: https://midu-react-11.surge.sh/. Para lograr esto, debe usar la API proporcionada por https://randomuser.me/.
