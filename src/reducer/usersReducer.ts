@@ -1,13 +1,14 @@
 import type { Action, State } from "../types.d.ts"
 //Selectors
-import { getFilteredUsers, getSortedByCountryUsers, getUsersNotDeleted } from "../selectors/usersSelectors.ts"
+import { getFilteredUsers, getSortedUsers, getUsersNotDeleted } from "../selectors/usersSelectors.ts"
+import { SortBy } from "../constants.ts"
 
 export const usersInitialState: State = {
   fetchedUsers: [],
   shownUsers: [],
   deletedUsers: [],
   isColorActive: false,
-  isSortByCountryActive: false,
+  sortProperty: SortBy.NONE,
   filterCountryValue: ''
 }
 
@@ -27,14 +28,14 @@ export const usersReducer = (state: State, action: Action) => {
     }
   }
 
-  if (action.type === 'SORT_UNSORT_BY_COUNTRY') {
+  if (action.type === 'SET_SORT_PROPERTY') {
     const filteredUsers = getFilteredUsers(getUsersNotDeleted(state.fetchedUsers, state.deletedUsers), state.filterCountryValue)
     
     return {
       ...state,
-      isSortByCountryActive: !state.isSortByCountryActive,
-      shownUsers: !state.isSortByCountryActive
-        ? getSortedByCountryUsers(filteredUsers)
+      sortProperty: action.payload,
+      shownUsers: action.payload !== SortBy.NONE
+        ? getSortedUsers(filteredUsers, action.payload)
         : filteredUsers
     }
   }
@@ -53,8 +54,8 @@ export const usersReducer = (state: State, action: Action) => {
     return {
       ...state,
       deletedUsers: updatedDeletedUsers,
-      shownUsers: state.isSortByCountryActive
-        ? getSortedByCountryUsers(filteredUsers)
+      shownUsers: state.sortProperty !== SortBy.NONE
+        ? getSortedUsers(filteredUsers, state.sortProperty)
         : filteredUsers
     }
   }
@@ -64,8 +65,8 @@ export const usersReducer = (state: State, action: Action) => {
     return {
       ...state, 
       deletedUsers: [],
-      shownUsers: state.isSortByCountryActive
-        ? getSortedByCountryUsers(filteredUsers)
+      shownUsers: state.sortProperty !== SortBy.NONE
+        ? getSortedUsers(filteredUsers, state.sortProperty)
         : filteredUsers
     }
   }
@@ -76,8 +77,8 @@ export const usersReducer = (state: State, action: Action) => {
     return {
       ...state,
       filterCountryValue: action.payload,
-      shownUsers: state.isSortByCountryActive
-        ? getSortedByCountryUsers(filteredUsers)
+      shownUsers: state.sortProperty !== SortBy.NONE
+        ? getSortedUsers(filteredUsers, state.sortProperty)
         : filteredUsers
     }
   }

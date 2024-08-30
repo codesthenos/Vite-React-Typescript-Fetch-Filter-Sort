@@ -1,3 +1,5 @@
+import type { SortBy } from "./constants"
+
 export interface APIResponse {
   results: User[];
   info:    Info;
@@ -101,14 +103,14 @@ export interface State {
   shownUsers: User[];
   deletedUsers: User[];
   isColorActive: boolean;
-  isSortByCountryActive: boolean;
+  sortProperty: SortBy;
   filterCountryValue: string;
 }
 
 export type Action =
 | { type: 'SET_FETCHED_USERS', payload: User[] }
 | { type: 'SET_COLORS' }
-| { type: 'SORT_UNSORT_BY_COUNTRY' }
+| { type: 'SET_SORT_PROPERTY', payload: SortBy }
 | { type: 'DELETE_ROW', payload: string}
 | { type: 'RECOVER_DELETES' }
 | { type: 'FILTER_USERS_BY_COUNTRY', payload: string }

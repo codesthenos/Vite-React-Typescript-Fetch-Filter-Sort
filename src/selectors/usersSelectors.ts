@@ -1,3 +1,4 @@
+import { SortBy } from "../constants.ts"
 import type { User } from "../types.d.ts"
 
 export const getUsersNotDeleted = (fetchedUsers: User[], deletedUsers: User[]) =>
@@ -14,23 +15,15 @@ export const getFilteredUsers = (usersNotDeleted: User[], inputValue: string) =>
     : usersNotDeleted
 }
 
-export const getSortedByCountryUsers = (users: User[]) =>
-  users.toSorted((a, b) => 
-    a.location.country.localeCompare(b.location.country)
-  )
-/*
-export const getSortedByNameUsers = (users: User[]) =>
-  users.toSorted((a, b) => 
-    a.name.first.localeCompare(b.name.first)
-  )
-if (action.type === 'SORT_UNSORT_BY_NAME') {
-  const filteredUsers = getFilteredUsers(getUsersNotDeleted(state.fetchedUsers, state.deletedUsers), state.filterCountryValue)
-  return {
-    isSortByCountryActive: state.isSortByCountryActive && !state.isSortByCountryActive,
-    isSortByNameActive: !state.isSortByNameActive,
-    shownUsers: !state.isSortByNameActive
-      ? getSortedByNameUsers(filteredUsers)
-      : filteredUsers
+export const getSortedUsers = (users: User[], type: SortBy) => {
+  const compareProperties: Record<string, (user: User) => string> = {
+    [SortBy.NAME]: user => user.name.first,
+    [SortBy.SURNAME]: user => user.name.last,
+    [SortBy.COUNTRY]: user => user.location.country
   }
+
+  return users.toSorted((a, b) => {
+    const getProperty = compareProperties[type]
+    return getProperty(a).localeCompare(getProperty(b))
+  })
 }
-*/

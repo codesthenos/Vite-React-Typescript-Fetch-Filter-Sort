@@ -5,3 +5,10 @@ export enum Headers {
   COUNTRY = 'Country',
   DELETE_USER = 'Delete user'
 }
+
+export enum SortBy {
+  NONE = 'none',
+  NAME = 'name',
+  SURNAME = 'surname',
+  COUNTRY = 'country'
+}

@@ -1,10 +1,18 @@
 //Constants
-import { Headers } from "../constants.ts"
+import { Headers, SortBy } from "../constants.ts"
 //Context
 import { useUsersContext } from "../context/useUsersContext.ts"
 
 export function UsersTable () {
-  const { shownUsers, isColorActive, deleteUser, toggleSortByCountry } = useUsersContext()
+  const { shownUsers, isColorActive, deleteUser, toggleSort, sortProperty } = useUsersContext()
+
+  const handleToggleSort = (property: SortBy) => {
+    if (sortProperty === property) {
+      toggleSort(SortBy.NONE)
+    } else {
+      toggleSort(property)
+    }
+  }
   
   return (
     <table>
@@ -14,15 +22,15 @@ export function UsersTable () {
             {Headers.PHOTO}
           </th>
 
-          <th className='pointer' onClick={() => {}}>
+          <th className='pointer' onClick={() => { handleToggleSort(SortBy.NAME) }}>
             {Headers.NAME}
           </th>
 
-          <th className='pointer' onClick={() => {}}>
+          <th className='pointer' onClick={() => { handleToggleSort(SortBy.SURNAME) }}>
             {Headers.SURNAME}
           </th>
 
-          <th className='pointer' onClick={toggleSortByCountry}>
+          <th className='pointer' onClick={() => { handleToggleSort(SortBy.COUNTRY) }}>
             {Headers.COUNTRY}
           </th>
 

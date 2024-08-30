@@ -1,11 +1,20 @@
+import { SortBy } from "../constants.ts"
 import { useUsersContext } from "../context/useUsersContext"
 
 export function SortUnsortByCountryButton () {
-  const { isSortByCountryActive, toggleSortByCountry } = useUsersContext()
+  const { sortProperty, toggleSort } = useUsersContext()
+
+  const handleToggleSort = (property: SortBy) => {
+    if (sortProperty === property) {
+      toggleSort(SortBy.NONE)
+    } else {
+      toggleSort(property)
+    }
+  }
 
   return (
-    <button onClick={toggleSortByCountry}>
-      {isSortByCountryActive ? 'Unsort' : 'Sort by country'}
+    <button onClick={() => { handleToggleSort(SortBy.COUNTRY) }}>
+      {sortProperty === SortBy.COUNTRY ? 'Unsort' : 'Sort by country'}
     </button>
   )
 }
