@@ -1,18 +1,34 @@
 //Constants
-import { HEADERS } from "../constants.ts"
+import { Headers } from "../constants.ts"
 //Context
 import { useUsersContext } from "../context/useUsersContext.ts"
 
 export function UsersTable () {
-  const { shownUsers, isColorActive, deleteUser } = useUsersContext()
+  const { shownUsers, isColorActive, deleteUser, toggleSortByCountry } = useUsersContext()
   
   return (
     <table>
       <thead>
         <tr>
-          {
-            HEADERS.map(headerCell => <th key={headerCell}>{headerCell}</th>)
-          }
+          <th>
+            {Headers.PHOTO}
+          </th>
+
+          <th className='pointer' onClick={() => {}}>
+            {Headers.NAME}
+          </th>
+
+          <th className='pointer' onClick={() => {}}>
+            {Headers.SURNAME}
+          </th>
+
+          <th className='pointer' onClick={toggleSortByCountry}>
+            {Headers.COUNTRY}
+          </th>
+
+          <th>
+            {Headers.DELETE_USER}
+          </th>
         </tr>
       </thead>
       

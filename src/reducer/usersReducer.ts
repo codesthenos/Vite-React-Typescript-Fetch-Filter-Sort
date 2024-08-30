@@ -1,6 +1,6 @@
 import type { Action, State } from "../types.d.ts"
 //Selectors
-import { getFilteredUsers, getSortedUsers, getUsersNotDeleted } from "../selectors/usersSelectors.ts"
+import { getFilteredUsers, getSortedByCountryUsers, getUsersNotDeleted } from "../selectors/usersSelectors.ts"
 
 export const usersInitialState: State = {
   fetchedUsers: [],
@@ -34,7 +34,7 @@ export const usersReducer = (state: State, action: Action) => {
       ...state,
       isSortByCountryActive: !state.isSortByCountryActive,
       shownUsers: !state.isSortByCountryActive
-        ? getSortedUsers(filteredUsers)
+        ? getSortedByCountryUsers(filteredUsers)
         : filteredUsers
     }
   }
@@ -54,7 +54,7 @@ export const usersReducer = (state: State, action: Action) => {
       ...state,
       deletedUsers: updatedDeletedUsers,
       shownUsers: state.isSortByCountryActive
-        ? getSortedUsers(filteredUsers)
+        ? getSortedByCountryUsers(filteredUsers)
         : filteredUsers
     }
   }
@@ -65,7 +65,7 @@ export const usersReducer = (state: State, action: Action) => {
       ...state, 
       deletedUsers: [],
       shownUsers: state.isSortByCountryActive
-        ? getSortedUsers(filteredUsers)
+        ? getSortedByCountryUsers(filteredUsers)
         : filteredUsers
     }
   }
@@ -77,7 +77,7 @@ export const usersReducer = (state: State, action: Action) => {
       ...state,
       filterCountryValue: action.payload,
       shownUsers: state.isSortByCountryActive
-        ? getSortedUsers(filteredUsers)
+        ? getSortedByCountryUsers(filteredUsers)
         : filteredUsers
     }
   }
