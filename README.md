@@ -1,5 +1,7 @@
 # Prueba técnica con TypeScript y React
 
+La rama 'perfect' es la misma web pero con un estado mas simple teniendo solo una lista de usuarios, manejando la logica del filtrado y orden de usuarios en el hook del contexto y todo queda a mis ojos de noob mas bonito, ademas usamos el useMemo en el filtrado y sorting de usuarios poniendonos en el lugar de tener listas muy muy grandes.
+
 La configuracion del linter parte de la base de la configuracion default de vite, pero con algunas normas incluidas para que se parezca un poco a standard
 
 Partiendo del video de midudev, dejo de verlo casi al principio y a base de pensar, buscar en google, hablar con chat gpt, mirar su repo y la web resultado, termino con este 'clon' que se comporta igual, salvo que ademas de ordenar usando las cabeceras tambien desordena, pero la estructura es completamente distinta usando reducer nativo de React y contexto, sin pasar ni una prop, ni uso el useRef, uso un useState que maneja el estado del fetch incial

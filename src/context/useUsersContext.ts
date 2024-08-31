@@ -1,7 +1,7 @@
-import { useContext } from "react"
+import { useContext, useMemo } from "react"
 import { UsersContext } from "./UsersContext.tsx"
 import { SortBy } from "../constants.ts"
-import type { User } from "../types"
+import type { User } from "../types.d.ts"
 
 export const useUsersContext = () => {
   const usersContext = useContext(UsersContext)
@@ -30,7 +30,7 @@ export const useUsersContext = () => {
     dispatch({ type: 'FILTER_USERS_BY_COUNTRY', payload: event.target.value })
   }
 
-  const sortedUsers = () => {
+  const sortedUsers = useMemo(() => {
     const filteredUsers = state.users.filter(user => !user.isDeleted &&
       user.location.country.toLowerCase()
         .includes(state.filterCountryValue.toLowerCase()))
@@ -50,7 +50,7 @@ export const useUsersContext = () => {
       const getProperty = compareProperties[state.sortProperty]
       return getProperty(a).localeCompare(getProperty(b))
     })
-  }
+  }, [state.users, state.filterCountryValue, state.sortProperty])
 
   return {
     users: state.users,

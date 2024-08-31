@@ -42,7 +42,7 @@ export function UsersTable () {
       
       <tbody className={isColorActive ? 'show-colors' : ''}>
         {
-          sortedUsers().map(user => (
+          sortedUsers.map(user => (
             <tr key={user.login.uuid}>
               <td>
                 <img src={user.picture.thumbnail} />
