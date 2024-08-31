@@ -7,6 +7,7 @@ function App () {
   const [users, setUsers] = useState<User[]>([])
   const [showColors, setShowColors] = useState(false)
   const [sortByCountry, setSortByCountry] = useState(false)
+  const [filterByCounntryValue, setFilterByCounntryValue] =useState('')
 
   const originalUsers = useRef<User[]>(users)
 
@@ -39,11 +40,16 @@ function App () {
     setUsers(originalUsers.current)
   }
   
+  const filteredUsers = users.filter(user =>
+    user.location.country.toLowerCase()
+      .includes(filterByCounntryValue.toLowerCase())
+  )
+
   const sortedUsers = sortByCountry
-    ? users.toSorted((a, b) => {
+    ? filteredUsers.toSorted((a, b) => {
       return a.location.country.localeCompare(b.location.country)
     })
-    : users
+    : filteredUsers
   
   return (
     <>
@@ -63,6 +69,12 @@ function App () {
         <button onClick={handleRecover}>
           Recover deleteds
         </button>
+
+        <input
+          placeholder='Filter by country'
+          onChange={(e) => setFilterByCounntryValue(e.target.value)}
+          value={filterByCounntryValue}
+        />
       </header>
       
       <UsersTable users={sortedUsers} showColors={showColors} deleteUser={handleDelete} />
