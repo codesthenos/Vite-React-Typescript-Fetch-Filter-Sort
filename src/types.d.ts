@@ -25,6 +25,7 @@ export interface User {
   id:         ID;
   picture:    Picture;
   nat:        string;
+  isDeleted?: boolean;
 }
 
 export interface Dob {
@@ -99,9 +100,7 @@ export interface Picture {
 }
 
 export interface State {
-  fetchedUsers: User[];
-  shownUsers: User[];
-  deletedUsers: User[];
+  users: User[];
   isColorActive: boolean;
   sortProperty: SortBy;
   filterCountryValue: string;

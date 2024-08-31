@@ -1,6 +1,7 @@
 import { useContext } from "react"
 import { UsersContext } from "./UsersContext.tsx"
-import type { SortBy } from "../constants.ts"
+import { SortBy } from "../constants.ts"
+import type { User } from "../types"
 
 export const useUsersContext = () => {
   const usersContext = useContext(UsersContext)
@@ -29,8 +30,30 @@ export const useUsersContext = () => {
     dispatch({ type: 'FILTER_USERS_BY_COUNTRY', payload: event.target.value })
   }
 
+  const sortedUsers = () => {
+    const filteredUsers = state.users.filter(user => !user.isDeleted &&
+      user.location.country.toLowerCase()
+        .includes(state.filterCountryValue.toLowerCase()))
+
+    if (state.sortProperty === SortBy.NONE) {
+
+      return filteredUsers
+    }
+
+    const compareProperties: Record<string, (user: User) => string> = {
+      [SortBy.NAME]: user => user.name.first,
+      [SortBy.SURNAME]: user => user.name.last,
+      [SortBy.COUNTRY]: user => user.location.country
+    }
+
+    return filteredUsers.toSorted((a, b) => {
+      const getProperty = compareProperties[state.sortProperty]
+      return getProperty(a).localeCompare(getProperty(b))
+    })
+  }
+
   return {
-    shownUsers: state.shownUsers,
+    users: state.users,
     isColorActive: state.isColorActive,
     toggleColors,
     sortProperty: state.sortProperty,
@@ -38,6 +61,7 @@ export const useUsersContext = () => {
     deleteUser,
     recoverDeletes,
     filterCountryValue: state.filterCountryValue,
-    handleFilterCountryInput
+    handleFilterCountryInput,
+    sortedUsers
   }
 }

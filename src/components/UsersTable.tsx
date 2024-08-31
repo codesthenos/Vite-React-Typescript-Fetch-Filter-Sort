@@ -4,7 +4,7 @@ import { Headers, SortBy } from "../constants.ts"
 import { useUsersContext } from "../context/useUsersContext.ts"
 
 export function UsersTable () {
-  const { shownUsers, isColorActive, deleteUser, toggleSort, sortProperty } = useUsersContext()
+  const { sortedUsers, isColorActive, deleteUser, toggleSort, sortProperty } = useUsersContext()
 
   const handleToggleSort = (property: SortBy) => {
     if (sortProperty === property) {
@@ -42,7 +42,7 @@ export function UsersTable () {
       
       <tbody className={isColorActive ? 'show-colors' : ''}>
         {
-          shownUsers.map(user => (
+          sortedUsers().map(user => (
             <tr key={user.login.uuid}>
               <td>
                 <img src={user.picture.thumbnail} />
