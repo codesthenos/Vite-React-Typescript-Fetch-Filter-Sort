@@ -1,5 +1,5 @@
 //Components
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { UsersTable } from './components/UsersTable.tsx'
 import type { User } from './types.d.ts'
 
@@ -8,11 +8,14 @@ function App () {
   const [showColors, setShowColors] = useState(false)
   const [sortByCountry, setSortByCountry] = useState(false)
 
+  const originalUsers = useRef<User[]>(users)
+
   useEffect(() => {
     fetch('https://randomuser.me/api?results=100')
       .then(async res => await res.json())
       .then(res => {
         setUsers(res.results)
+        originalUsers.current = res.results
       })
       .catch(err => {
         console.error(err)
@@ -30,6 +33,10 @@ function App () {
   const handleDelete = (email: string) => {
     const filteredUsers = users.filter((user) => user.email !== email)
     setUsers(filteredUsers)
+  }
+
+  const handleRecover = () => {
+    setUsers(originalUsers.current)
   }
   
   const sortedUsers = sortByCountry
@@ -51,6 +58,10 @@ function App () {
 
         <button onClick={toggleSortByCountry}>
           {sortByCountry ? 'Unsort' : 'Sort by Country'}
+        </button>
+
+        <button onClick={handleRecover}>
+          Recover deleteds
         </button>
       </header>
       
