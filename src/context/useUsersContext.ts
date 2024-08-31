@@ -31,6 +31,7 @@ export const useUsersContext = () => {
   }
 
   const sortedUsers = useMemo(() => {
+    console.log('calculating filtered and sorted')
     const filteredUsers = state.users.filter(user => !user.isDeleted &&
       user.location.country.toLowerCase()
         .includes(state.filterCountryValue.toLowerCase()))
