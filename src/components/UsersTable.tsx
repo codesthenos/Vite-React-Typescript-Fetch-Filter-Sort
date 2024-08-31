@@ -1,27 +1,14 @@
 import { useMemo } from "react"
-
 import { HEADERS } from "../constants.ts"
-import { useUsers } from "../hooks/useUsers.ts"
+import type { User } from "../types.d.ts"
 
-export function UsersTable () {
-  const { state, dispatch } = useUsers()
+interface Props {
+  users: User[],
+  showColors: boolean,
+  deleteUser: (email: string) => void
+}
 
-  const filteredUsers = useMemo(() => {
-    return state.filterCountryValue
-      ? state.fetchedUsers.filter(user =>
-        user.location.country.toLowerCase().includes(state.filterCountryValue.toLowerCase()))
-      : state.fetchedUsers
-  }, [state.fetchedUsers, state.filterCountryValue])
-
-  const sortedUsers = useMemo(() => {
-    return state.isSortByCountryActive
-      ? filteredUsers.toSorted((a, b) => a.location.country.localeCompare(b.location.country))
-      : filteredUsers
-  }, [state.fetchedUsers, state.isSortByCountryActive])
-
-  const deleteUser = (userLoginUUID: string) => {
-    dispatch({ type: 'DELETE_ROW', payload: userLoginUUID })
-  }
+export function UsersTable ({ users, showColors, deleteUser }: Props) {
 
   return (
     <table>
@@ -33,9 +20,9 @@ export function UsersTable () {
         </tr>
       </thead>
       
-      <tbody className={state.isColorRowActive ? 'show-colors' : ''}>
+      <tbody className={showColors ? 'show-colors' : ''}>
         {
-          sortedUsers.map(user => (
+          users.map(user => (
             <tr key={user.login.uuid}>
               <td>
                 <img src={user.picture.thumbnail} />
@@ -54,7 +41,7 @@ export function UsersTable () {
               </td>
 
               <td>
-                <button onClick={() => { deleteUser(user.login.uuid) }}>Delete</button>
+                <button onClick={() => { deleteUser(user.email) }}>Delete</button>
               </td>
             </tr>
           ))
