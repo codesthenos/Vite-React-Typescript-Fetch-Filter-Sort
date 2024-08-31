@@ -1,5 +1,5 @@
 //Components
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { UsersTable } from './components/UsersTable.tsx'
 import type { User } from './types.d.ts'
 
@@ -7,7 +7,7 @@ function App () {
   const [users, setUsers] = useState<User[]>([])
   const [showColors, setShowColors] = useState(false)
   const [sortByCountry, setSortByCountry] = useState(false)
-  const [filterByCounntryValue, setFilterByCounntryValue] =useState('')
+  const [filterByCountryValue, setFilterByCountryValue] =useState('')
 
   const originalUsers = useRef<User[]>(users)
 
@@ -39,17 +39,31 @@ function App () {
   const handleRecover = () => {
     setUsers(originalUsers.current)
   }
-  
-  const filteredUsers = users.filter(user =>
-    user.location.country.toLowerCase()
-      .includes(filterByCounntryValue.toLowerCase())
-  )
 
-  const sortedUsers = sortByCountry
-    ? filteredUsers.toSorted((a, b) => {
+  const filterUsers = (users: User[]) => {
+    return users.filter(user =>
+      user.location.country.toLowerCase()
+        .includes(filterByCountryValue.toLowerCase())
+    )
+  }
+
+  const sortUsers = (users: User[]) => {
+    return sortByCountry
+    ? users.toSorted((a, b) => {
       return a.location.country.localeCompare(b.location.country)
     })
-    : filteredUsers
+    : users
+  }
+
+  const filteredUsers = useMemo(() => {
+    console.log('calculate filtered')
+    return filterUsers(users)
+  }, [users, filterByCountryValue])
+
+  const sortedUsers = useMemo(() => {
+    console.log('calculate sorted')
+    return sortUsers(filteredUsers)
+  }, [filteredUsers, sortByCountry])
   
   return (
     <>
@@ -72,8 +86,8 @@ function App () {
 
         <input
           placeholder='Filter by country'
-          onChange={(e) => setFilterByCounntryValue(e.target.value)}
-          value={filterByCounntryValue}
+          onChange={(e) => setFilterByCountryValue(e.target.value)}
+          value={filterByCountryValue}
         />
       </header>
       
