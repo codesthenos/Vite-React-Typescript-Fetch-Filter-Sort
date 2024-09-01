@@ -2,14 +2,23 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { UsersTable } from './components/UsersTable.tsx'
 import type { User } from './types.d.ts'
+import { SortBy } from './constants.ts'
 
 function App () {
   const [users, setUsers] = useState<User[]>([])
   const [showColors, setShowColors] = useState(false)
-  const [sortByCountry, setSortByCountry] = useState(false)
+  const [sortProperty, setSortProperty] = useState<string>(SortBy.NONE)
   const [filterByCountryValue, setFilterByCountryValue] =useState('')
 
-  const originalUsers = useRef<User[]>(users)
+  const originalUsers = useRef(users)
+
+  const prevSortPropRef = useRef(sortProperty)
+  useEffect(() => {
+    prevSortPropRef.current = sortProperty
+  }, [sortProperty])
+  
+  console.log('PROP', sortProperty)
+  console.log('REF', prevSortPropRef.current)
 
   useEffect(() => {
     fetch('https://randomuser.me/api?results=100')
@@ -27,8 +36,9 @@ function App () {
     setShowColors(!showColors)
   }
 
-  const toggleSortByCountry = () => {
-    setSortByCountry(!sortByCountry)
+  const toggleSortProperty = (property: string) => {
+    const newSortingProperty = sortProperty === property ? SortBy.NONE : property
+    setSortProperty(newSortingProperty)
   }
 
   const handleDelete = (email: string) => {
@@ -48,11 +58,26 @@ function App () {
   }
 
   const sortUsers = (users: User[]) => {
-    return sortByCountry
-    ? users.toSorted((a, b) => {
-      return a.location.country.localeCompare(b.location.country)
-    })
-    : users
+    if (sortProperty === prevSortPropRef.current) return users
+
+    if (sortProperty === SortBy.NONE) return users
+    console.log('calculate sorted')
+
+    if (sortProperty === SortBy.NAME) {
+      return users.toSorted((a, b) =>
+        a.name.first.localeCompare(b.name.first))
+    }
+
+    if (sortProperty === SortBy.SURNAME) {
+      return users.toSorted((a, b) =>
+        a.name.last.localeCompare(b.name.last))
+    }
+
+    if (sortProperty === SortBy.COUNTRY) {
+      return users.toSorted((a, b) =>
+        a.location.country.localeCompare(b.location.country))
+    }
+    return users
   }
 
   const filteredUsers = useMemo(() => {
@@ -61,9 +86,9 @@ function App () {
   }, [users, filterByCountryValue])
 
   const sortedUsers = useMemo(() => {
-    console.log('calculate sorted')
+    
     return sortUsers(filteredUsers)
-  }, [filteredUsers, sortByCountry])
+  }, [filteredUsers, sortProperty])
   
   return (
     <>
@@ -76,8 +101,8 @@ function App () {
           {showColors ? 'Remove Colors' : 'Color rows'}
         </button>
 
-        <button onClick={toggleSortByCountry}>
-          {sortByCountry ? 'Unsort' : 'Sort by Country'}
+        <button onClick={() => { toggleSortProperty(SortBy.COUNTRY) }}>
+          {sortProperty === SortBy.COUNTRY ? 'Unsort' : 'Sort by Country'}
         </button>
 
         <button onClick={handleRecover}>
@@ -91,7 +116,7 @@ function App () {
         />
       </header>
       
-      <UsersTable users={sortedUsers} showColors={showColors} deleteUser={handleDelete} />
+      <UsersTable users={sortedUsers} showColors={showColors} deleteUser={handleDelete} toggleSortProperty={toggleSortProperty} />
     </>
   )
 }

@@ -54,3 +54,7 @@ td img {
   background-color: darksalmon;
   color: black;
 }
+
+.pointer {
+  cursor: pointer;
+}

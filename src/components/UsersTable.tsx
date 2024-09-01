@@ -1,21 +1,31 @@
-import { useMemo } from "react"
-import { HEADERS } from "../constants.ts"
+import { Headers } from "../constants.ts"
 import type { User } from "../types.d.ts"
 
 interface Props {
   users: User[],
   showColors: boolean,
-  deleteUser: (email: string) => void
+  deleteUser: (email: string) => void,
+  toggleSortProperty: (property: string) => void
 }
 
-export function UsersTable ({ users, showColors, deleteUser }: Props) {
+export function UsersTable ({ users, showColors, deleteUser, toggleSortProperty }: Props) {
 
   return (
     <table>
       <thead>
         <tr>
           {
-            HEADERS.map(headerCell => <th key={headerCell}>{headerCell}</th>)
+            Object.values(Headers).map(headerCell =>
+              <th
+                key={headerCell}
+                className={headerCell === Headers.PHOTO || headerCell === Headers.DELETE
+                  ? "" : "pointer"}
+                onClick={headerCell === Headers.PHOTO || headerCell === Headers.DELETE
+                  ? () => {} : () => { toggleSortProperty(headerCell) }}
+              >
+                {headerCell}
+              </th>
+            )
           }
         </tr>
       </thead>
