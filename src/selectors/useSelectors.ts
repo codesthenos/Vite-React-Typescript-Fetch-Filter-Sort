@@ -8,7 +8,6 @@ export const filterUsers = (users: User[], filterValue: string) => {
 }
 
 export const sortUsers = (users: User[], property: SortBy) => {
-  if (property === SortBy.NONE) return users
   
   const compareProperties: Record<string, (user: User) => string> = {
     [SortBy.NAME]: user => user.name.first,

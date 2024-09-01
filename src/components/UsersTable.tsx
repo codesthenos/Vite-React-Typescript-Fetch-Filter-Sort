@@ -1,4 +1,4 @@
-import { useMemo } from "react"
+import { useEffect, useMemo, useRef } from "react"
 //Constants
 import { Headers, SortBy } from "../constants.ts"
 //Context
@@ -17,12 +17,22 @@ export function UsersTable () {
     }
   }
 
+  const previouSortPropertyRef = useRef(sortProperty)
+
+  useEffect(() => {
+    previouSortPropertyRef.current = sortProperty
+  }, [sortProperty])
+
   const filteredUsers = useMemo(() => {
+    if (filterCountryValue.length === 0) return users.filter(user => !user.isDeleted)
+
     console.log('---FILTERING---')
     return filterUsers(users, filterCountryValue)
   }, [users, filterCountryValue])
 
   const sortedUsers = useMemo(() => {
+    if (sortProperty === SortBy.NONE || previouSortPropertyRef.current === sortProperty) return filteredUsers
+
     console.log('---SORTING---')
     return sortUsers(filteredUsers, sortProperty)
   }, [filteredUsers, sortProperty])
