@@ -93,6 +93,10 @@ function App () {
 
     return sortUsers(filteredUsers)
   }, [filteredUsers, sortProperty])
+
+  const goPreviousPage = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1)
+  }
   
   return (
     <>
@@ -126,11 +130,18 @@ function App () {
         {!loading && !error && users.length === 0 && <p>No users found</p>}
         {!loading && !error && users.length > 0 && <UsersTable users={sortedUsers} showColors={showColors} deleteUser={handleDelete} toggleSortProperty={toggleSortProperty} />}
 
-        {!loading && !error &&
-        <button onClick={() => { setCurrentPage(currentPage + 1) }}>
-          Next Page
-        </button>
-        } 
+        <div>
+          {!loading && !error &&
+            <button onClick={() => { setCurrentPage(currentPage + 1) }}>
+              Next Page
+            </button>
+          }
+          {!loading && !error && currentPage > 1 &&
+            <button onClick={goPreviousPage}>
+              Previous Page
+            </button>
+          }
+        </div>
       </main>
     </>
   )
