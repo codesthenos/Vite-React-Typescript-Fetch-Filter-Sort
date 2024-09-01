@@ -1,7 +1,7 @@
 //Components
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { UsersTable } from './components/UsersTable.tsx'
-import type { User } from './types.d.ts'
+import type { APIResponse, User } from './types.d.ts'
 import { SortBy } from './constants.ts'
 
 function App () {
@@ -9,6 +9,10 @@ function App () {
   const [showColors, setShowColors] = useState(false)
   const [sortProperty, setSortProperty] = useState<string>(SortBy.NONE)
   const [filterByCountryValue, setFilterByCountryValue] =useState('')
+
+  const [loading, setLoading] = useState(false)
+  const [error, setError] =useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
 
   const originalUsers = useRef(users)
 
@@ -18,16 +22,26 @@ function App () {
   }, [sortProperty])
 
   useEffect(() => {
-    fetch('https://randomuser.me/api?results=100')
-      .then(async res => await res.json())
+    setLoading(true)
+    setError(false)
+
+    fetch(`https://randomuser.me/api?seed=codesthenos&results=10&page=${currentPage}`)
       .then(res => {
+        if (!res.ok) throw new Error('Error fetching users')
+        return res.json()
+      })
+      .then((res: APIResponse) => {
         setUsers(res.results)
         originalUsers.current = res.results
       })
-      .catch(err => {
+      .catch((err: unknown) => {
         console.error(err)
+        setError(true)
       })
-  }, [])
+      .finally(() => {
+        setLoading(false)
+      })
+  }, [currentPage])
 
   const toggleColors = () => {
     setShowColors(!showColors)
@@ -82,9 +96,9 @@ function App () {
   
   return (
     <>
-      <h1>CODESTHENOS</h1>
+      <h2>CODESTHENOS</h2>
 
-      <h3>USER FETCH APP</h3>
+      <h3>PAGE {currentPage}</h3>
 
       <header>
         <button onClick={toggleColors}>
@@ -101,12 +115,23 @@ function App () {
 
         <input
           placeholder='Filter by country'
-          onChange={(e) => setFilterByCountryValue(e.target.value)}
+          onChange={(e) => { setFilterByCountryValue(e.target.value) }}
           value={filterByCountryValue}
         />
       </header>
-      
-      <UsersTable users={sortedUsers} showColors={showColors} deleteUser={handleDelete} toggleSortProperty={toggleSortProperty} />
+
+      <main>
+        {loading && <p>Loading...</p>}
+        {!loading && error && <p>Fatal Error</p>}
+        {!loading && !error && users.length === 0 && <p>No users found</p>}
+        {!loading && !error && users.length > 0 && <UsersTable users={sortedUsers} showColors={showColors} deleteUser={handleDelete} toggleSortProperty={toggleSortProperty} />}
+
+        {!loading && !error &&
+        <button onClick={() => { setCurrentPage(currentPage + 1) }}>
+          Next Page
+        </button>
+        } 
+      </main>
     </>
   )
 }
