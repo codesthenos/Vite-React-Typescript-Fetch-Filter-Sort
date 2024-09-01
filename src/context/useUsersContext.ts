@@ -1,7 +1,6 @@
-import { useContext, useMemo } from "react"
+import { useContext } from "react"
 import { UsersContext } from "./UsersContext.tsx"
-import { SortBy } from "../constants.ts"
-import type { User } from "../types.d.ts"
+import type { SortBy } from "../constants.ts"
 
 export const useUsersContext = () => {
   const usersContext = useContext(UsersContext)
@@ -30,29 +29,6 @@ export const useUsersContext = () => {
     dispatch({ type: 'FILTER_USERS_BY_COUNTRY', payload: event.target.value })
   }
 
-  const sortedUsers = useMemo(() => {
-    console.log('calculating filtered and sorted')
-    const filteredUsers = state.users.filter(user => !user.isDeleted &&
-      user.location.country.toLowerCase()
-        .includes(state.filterCountryValue.toLowerCase()))
-
-    if (state.sortProperty === SortBy.NONE) {
-
-      return filteredUsers
-    }
-
-    const compareProperties: Record<string, (user: User) => string> = {
-      [SortBy.NAME]: user => user.name.first,
-      [SortBy.SURNAME]: user => user.name.last,
-      [SortBy.COUNTRY]: user => user.location.country
-    }
-
-    return filteredUsers.toSorted((a, b) => {
-      const getProperty = compareProperties[state.sortProperty]
-      return getProperty(a).localeCompare(getProperty(b))
-    })
-  }, [state.users, state.filterCountryValue, state.sortProperty])
-
   return {
     users: state.users,
     isColorActive: state.isColorActive,
@@ -62,7 +38,6 @@ export const useUsersContext = () => {
     deleteUser,
     recoverDeletes,
     filterCountryValue: state.filterCountryValue,
-    handleFilterCountryInput,
-    sortedUsers
+    handleFilterCountryInput
   }
 }

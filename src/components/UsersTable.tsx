@@ -1,10 +1,15 @@
+import { useMemo } from "react"
+//Types
+import type { User } from "../types.d.ts"
 //Constants
 import { Headers, SortBy } from "../constants.ts"
 //Context
 import { useUsersContext } from "../context/useUsersContext.ts"
+//Selectors
+import { useSelectors } from "../selectors/useSelectors.ts"
 
 export function UsersTable () {
-  const { sortedUsers, isColorActive, deleteUser, toggleSort, sortProperty } = useUsersContext()
+  const { users, isColorActive, deleteUser, toggleSort, sortProperty, filterCountryValue } = useUsersContext()
 
   const handleToggleSort = (property: SortBy) => {
     if (sortProperty === property) {
@@ -13,6 +18,31 @@ export function UsersTable () {
       toggleSort(property)
     }
   }
+
+  const filteredUsers = useMemo(() => {
+    console.log('---FILTERING---')
+    return users.filter(user => !user.isDeleted &&
+      user.location.country.toLowerCase()
+        .includes(filterCountryValue.toLowerCase()))    
+  }, [users, filterCountryValue])
+
+  const sortedUsers = useMemo(() => {
+    console.log('---SORTING---')
+
+    if (sortProperty === SortBy.NONE) return filteredUsers
+    
+    const compareProperties: Record<string, (user: User) => string> = {
+      [SortBy.NAME]: user => user.name.first,
+      [SortBy.SURNAME]: user => user.name.last,
+      [SortBy.COUNTRY]: user => user.location.country
+    }
+    
+    return filteredUsers.toSorted((a, b) => {
+      const getProperty = compareProperties[sortProperty]
+      return getProperty(a).localeCompare(getProperty(b))
+    })
+
+  }, [filteredUsers, sortProperty])
   
   return (
     <table>
