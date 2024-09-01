@@ -1,6 +1,6 @@
 import { useContext } from "react"
 import { UsersContext } from "./UsersContext.tsx"
-import type { SortBy } from "../constants.ts"
+import { SortBy } from "../constants.ts"
 
 export const useUsersContext = () => {
   const usersContext = useContext(UsersContext)
@@ -11,10 +11,6 @@ export const useUsersContext = () => {
 
   const toggleColors = () => {
     dispatch({ type: 'SET_COLORS' })
-  }
-
-  const toggleSort = (property: SortBy) => {
-    dispatch({ type: 'SET_SORT_PROPERTY', payload: property })
   }
 
   const deleteUser = (userLoginUUID: string) => {
@@ -29,12 +25,20 @@ export const useUsersContext = () => {
     dispatch({ type: 'FILTER_USERS_BY_COUNTRY', payload: event.target.value })
   }
 
+  const handleToggleSort = (property: SortBy) => {
+    if (state.sortProperty === property) {
+      dispatch({ type: 'SET_SORT_PROPERTY', payload: SortBy.NONE })
+    } else {
+      dispatch({ type: 'SET_SORT_PROPERTY', payload: property })
+    }
+  }
+
   return {
     users: state.users,
     isColorActive: state.isColorActive,
     toggleColors,
     sortProperty: state.sortProperty,
-    toggleSort,
+    handleToggleSort,
     deleteUser,
     recoverDeletes,
     filterCountryValue: state.filterCountryValue,
