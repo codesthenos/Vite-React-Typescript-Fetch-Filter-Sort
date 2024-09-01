@@ -16,9 +16,6 @@ function App () {
   useEffect(() => {
     prevSortPropRef.current = sortProperty
   }, [sortProperty])
-  
-  console.log('PROP', sortProperty)
-  console.log('REF', prevSortPropRef.current)
 
   useEffect(() => {
     fetch('https://randomuser.me/api?results=100')
@@ -58,35 +55,28 @@ function App () {
   }
 
   const sortUsers = (users: User[]) => {
-    if (sortProperty === prevSortPropRef.current) return users
+    if (sortProperty === prevSortPropRef.current || sortProperty === SortBy.NONE) return users
 
-    if (sortProperty === SortBy.NONE) return users
-    console.log('calculate sorted')
-
-    if (sortProperty === SortBy.NAME) {
-      return users.toSorted((a, b) =>
-        a.name.first.localeCompare(b.name.first))
+    const compareProperties: Record<string, (user: User) => string> = {
+      [SortBy.NAME]: user => user.name.first,
+      [SortBy.SURNAME]: user => user.name.last,
+      [SortBy.COUNTRY]: user => user.location.country
     }
 
-    if (sortProperty === SortBy.SURNAME) {
-      return users.toSorted((a, b) =>
-        a.name.last.localeCompare(b.name.last))
-    }
+    return users.toSorted((a, b) => {
+      const getProperty = compareProperties[sortProperty]
 
-    if (sortProperty === SortBy.COUNTRY) {
-      return users.toSorted((a, b) =>
-        a.location.country.localeCompare(b.location.country))
-    }
-    return users
+      return getProperty(a).localeCompare(getProperty(b))
+    })
   }
 
   const filteredUsers = useMemo(() => {
-    console.log('calculate filtered')
+
     return filterUsers(users)
   }, [users, filterByCountryValue])
 
   const sortedUsers = useMemo(() => {
-    
+
     return sortUsers(filteredUsers)
   }, [filteredUsers, sortProperty])
   
