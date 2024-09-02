@@ -1,6 +1,7 @@
 import { useContext } from "react"
 import { UsersContext } from "./UsersContext.tsx"
 import { SortBy } from "../constants.ts"
+import type { User } from "../types.d.ts"
 
 export const useUsersContext = () => {
   const usersContext = useContext(UsersContext)
@@ -33,6 +34,12 @@ export const useUsersContext = () => {
     }
   }
 
+  const setFetchedUsers = (users: User[]) => {
+    if (users) {
+      dispatch({ type: 'SET_FETCHED_USERS', payload: users })
+    }
+  }
+
   return {
     users: state.users,
     isColorActive: state.isColorActive,
@@ -42,6 +49,7 @@ export const useUsersContext = () => {
     deleteUser,
     recoverDeletes,
     filterCountryValue: state.filterCountryValue,
-    handleFilterCountryInput
+    handleFilterCountryInput,
+    setFetchedUsers
   }
 }

@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react"
 import type { User, APIResponse } from "../types"
 
-export const useGetFetchedUsers = () => {
+export const useGetFetchedUsers = (page: number) => {
   const [fetchedUsers, setFetchedUsers] = useState<User[]>([])
 
   useEffect(() => {
-    fetch('https://randomuser.me/api?results=100')
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    fetch(`https://randomuser.me/api?seed=ataraxia&results=10&page=${page}`)
       .then(res => res.json())
       .then((jsonData: APIResponse) => {
         setFetchedUsers(jsonData.results)
@@ -15,7 +16,7 @@ export const useGetFetchedUsers = () => {
         console.error(err)
       })
 
-  }, [])
+  }, [page])
 
   return { fetchedUsers }
 }

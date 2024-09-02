@@ -10,7 +10,8 @@ export const UsersContext = createContext<ContextProps | undefined>(undefined)
 export const UsersProvider: React.FC<UsersProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(usersReducer, usersInitialState)
 
-  const { fetchedUsers } = useGetFetchedUsers()
+  //Magic number 1, is the first page of users that will be load
+  const { fetchedUsers } = useGetFetchedUsers(1)
 
   useEffect(() => {
     if (fetchedUsers) {
