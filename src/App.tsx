@@ -4,6 +4,17 @@ import { UsersTable } from './components/UsersTable.tsx'
 import type { APIResponse, User } from './types.d.ts'
 import { SortBy } from './constants.ts'
 
+const fetchUsers = async (page: number) => {
+  return await fetch(`https://randomuser.me/api?seed=codesthenos&results=10&page=${page}`)
+    .then(res => {
+      if (!res.ok) throw new Error('Error fetching users')
+      return res.json()
+    })
+    .then((res: APIResponse) => {
+      return res.results
+    })
+}
+
 function App () {
   const [users, setUsers] = useState<User[]>([])
   const [showColors, setShowColors] = useState(false)
@@ -32,18 +43,13 @@ function App () {
     setLoading(true)
     setError(false)
 
-    fetch(`https://randomuser.me/api?seed=codesthenos&results=10&page=${currentPage}`)
-      .then(res => {
-        if (!res.ok) throw new Error('Error fetching users')
-        return res.json()
-      })
-      .then((res: APIResponse) => {
+    fetchUsers(currentPage)
+      .then((users: User[]) => {
         setUsers(prevUsers => {
-          const newUsers = prevUsers.concat(res.results)
+          const newUsers = prevUsers.concat(users)
           originalUsers.current = newUsers
           return newUsers
-        })
-        
+        })        
       })
       .catch((err: unknown) => {
         console.error(err)
@@ -157,12 +163,14 @@ function App () {
 
         {loading && <p>Loading...</p>}
 
-        {!loading && error && <p>Fatal Error</p>}
+        {error && <p>Fatal Error</p>}
 
-        {!loading && !error && users.length === 0 && <p>No users found</p>}
+        {!error && users.length === 0 && <p>No users found</p>}
 
         <div>
-          <h3>{currentPage === 1 ? 'PAGE' : 'PAGES'} {getListOfPages(currentPage).join(', ')}</h3>
+          {!loading &&
+            <h3>{currentPage === 1 ? 'PAGE' : 'PAGES'} {getListOfPages(currentPage).join(', ')}</h3>
+          }
 
           {!loading && !error &&
             <button onClick={() => { setCurrentPage(currentPage + 1) }}>
