@@ -21,6 +21,13 @@ function App () {
     prevSortPropRef.current = sortProperty
   }, [sortProperty])
 
+  const bottomRef = useRef<HTMLDivElement | null>(null)
+  useEffect(() => {
+    if (bottomRef.current) {
+      bottomRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' })
+    }
+  }, [users])
+
   useEffect(() => {
     setLoading(true)
     setError(false)
@@ -31,8 +38,12 @@ function App () {
         return res.json()
       })
       .then((res: APIResponse) => {
-        setUsers(res.results)
-        originalUsers.current = res.results
+        setUsers(prevUsers => {
+          const newUsers = prevUsers.concat(res.results)
+          originalUsers.current = newUsers
+          return newUsers
+        })
+        
       })
       .catch((err: unknown) => {
         console.error(err)
@@ -97,12 +108,22 @@ function App () {
   const goPreviousPage = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1)
   }
+
+  const getListOfPages = (currentPage: number) => {
+    return Array.from({ length: currentPage }, (_, i) => i + 1)
+  }
   
   return (
     <>
       <h2>CODESTHENOS</h2>
 
-      <h3>PAGE {currentPage}</h3>
+      <div>
+        {/*!loading && !error && currentPage > 1 &&
+          <button onClick={goPreviousPage}>
+            Previous Page
+          </button>
+        */}
+      </div>
 
       <header>
         <button onClick={toggleColors}>
@@ -125,23 +146,32 @@ function App () {
       </header>
 
       <main>
+        {users.length > 0 &&
+          <UsersTable
+            users={sortedUsers}
+            showColors={showColors}
+            deleteUser={handleDelete}
+            toggleSortProperty={toggleSortProperty}
+          />
+        }
+
         {loading && <p>Loading...</p>}
+
         {!loading && error && <p>Fatal Error</p>}
+
         {!loading && !error && users.length === 0 && <p>No users found</p>}
-        {!loading && !error && users.length > 0 && <UsersTable users={sortedUsers} showColors={showColors} deleteUser={handleDelete} toggleSortProperty={toggleSortProperty} />}
 
         <div>
+          <h3>{currentPage === 1 ? 'PAGE' : 'PAGES'} {getListOfPages(currentPage).join(', ')}</h3>
+
           {!loading && !error &&
             <button onClick={() => { setCurrentPage(currentPage + 1) }}>
-              Next Page
-            </button>
-          }
-          {!loading && !error && currentPage > 1 &&
-            <button onClick={goPreviousPage}>
-              Previous Page
+              Load more users
             </button>
           }
         </div>
+
+        <div ref={bottomRef} />
       </main>
     </>
   )
