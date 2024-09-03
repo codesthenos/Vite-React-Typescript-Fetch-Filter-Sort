@@ -1,64 +1,41 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
+/* eslint-disable @typescript-eslint/no-unsafe-enum-comparison */
 //Components
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { UsersTable } from './components/UsersTable.tsx'
 import type { APIResponse, User } from './types.d.ts'
 import { SortBy } from './constants.ts'
+import { useInfiniteQuery } from '@tanstack/react-query'
 
-const fetchUsers = async (page: number) => {
-  return await fetch(`https://randomuser.me/api?seed=codesthenos&results=10&page=${page}`)
+const fetchUsers = async ({ pageParam = 1 }: { pageParam: number }) => {
+  return await fetch(`https://randomuser.me/api?seed=codesthenos&results=10&page=${pageParam}`)
     .then(res => {
       if (!res.ok) throw new Error('Error fetching users')
       return res.json()
     })
     .then((res: APIResponse) => {
-      return res.results
+      const currentPage = res.info.page
+      const nextPage = currentPage > 3 ? undefined : currentPage + 1
+      return {
+        users: res.results,
+        nextPage: nextPage
+      }
     })
 }
 
 function App () {
-  const [users, setUsers] = useState<User[]>([])
+  const { isLoading, isError, data, refetch, fetchNextPage, hasNextPage } = useInfiniteQuery({
+    queryKey: ['users'],
+    queryFn: fetchUsers,
+    getNextPageParam: (lastPage) => lastPage.nextPage,
+    initialPageParam: 1
+  })
+  const users = data?.pages.flatMap(page => page.users) ?? []
+  console.log(data)
+
   const [showColors, setShowColors] = useState(false)
   const [sortProperty, setSortProperty] = useState<string>(SortBy.NONE)
   const [filterByCountryValue, setFilterByCountryValue] =useState('')
-
-  const [loading, setLoading] = useState(false)
-  const [error, setError] =useState(false)
-  const [currentPage, setCurrentPage] = useState(1)
-
-  const originalUsers = useRef(users)
-
-  const prevSortPropRef = useRef(sortProperty)
-  useEffect(() => {
-    prevSortPropRef.current = sortProperty
-  }, [sortProperty])
-
-  const bottomRef = useRef<HTMLDivElement | null>(null)
-  useEffect(() => {
-    if (bottomRef.current) {
-      bottomRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' })
-    }
-  }, [users])
-
-  useEffect(() => {
-    setLoading(true)
-    setError(false)
-
-    fetchUsers(currentPage)
-      .then((users: User[]) => {
-        setUsers(prevUsers => {
-          const newUsers = prevUsers.concat(users)
-          originalUsers.current = newUsers
-          return newUsers
-        })        
-      })
-      .catch((err: unknown) => {
-        console.error(err)
-        setError(true)
-      })
-      .finally(() => {
-        setLoading(false)
-      })
-  }, [currentPage])
 
   const toggleColors = () => {
     setShowColors(!showColors)
@@ -70,12 +47,12 @@ function App () {
   }
 
   const handleDelete = (email: string) => {
-    const filteredUsers = users.filter((user) => user.email !== email)
-    setUsers(filteredUsers)
+    // const filteredUsers = users.filter((user) => user.email !== email)
+    // setUsers(filteredUsers)
   }
 
-  const handleRecover = () => {
-    setUsers(originalUsers.current)
+  const handleRecover = async () => {
+    await refetch()
   }
 
   const filterUsers = (users: User[]) => {
@@ -86,7 +63,7 @@ function App () {
   }
 
   const sortUsers = (users: User[]) => {
-    if (sortProperty === prevSortPropRef.current || sortProperty === SortBy.NONE) return users
+    if (sortProperty === SortBy.NONE) return users
 
     const compareProperties: Record<string, (user: User) => string> = {
       [SortBy.NAME]: user => user.name.first,
@@ -102,34 +79,16 @@ function App () {
   }
 
   const filteredUsers = useMemo(() => {
-
     return filterUsers(users)
   }, [users, filterByCountryValue])
 
   const sortedUsers = useMemo(() => {
-
     return sortUsers(filteredUsers)
   }, [filteredUsers, sortProperty])
-
-  const goPreviousPage = () => {
-    if (currentPage > 1) setCurrentPage(currentPage - 1)
-  }
-
-  const getListOfPages = (currentPage: number) => {
-    return Array.from({ length: currentPage }, (_, i) => i + 1)
-  }
   
   return (
     <>
       <h2>CODESTHENOS</h2>
-
-      <div>
-        {/*!loading && !error && currentPage > 1 &&
-          <button onClick={goPreviousPage}>
-            Previous Page
-          </button>
-        */}
-      </div>
 
       <header>
         <button onClick={toggleColors}>
@@ -140,7 +99,7 @@ function App () {
           {sortProperty === SortBy.COUNTRY ? 'Unsort' : 'Sort by Country'}
         </button>
 
-        <button onClick={handleRecover}>
+        <button onClick={() => handleRecover}>
           Recover deleteds
         </button>
 
@@ -161,25 +120,23 @@ function App () {
           />
         }
 
-        {loading && <p>Loading...</p>}
+        {isLoading && <p>Loading...</p>}
 
-        {error && <p>Fatal Error</p>}
+        {isError && <p>Fatal Error</p>}
 
-        {!error && users.length === 0 && <p>No users found</p>}
+        {!isError && users.length === 0 && <p>No users found</p>}
 
         <div>
-          {!loading &&
-            <h3>{currentPage === 1 ? 'PAGE' : 'PAGES'} {getListOfPages(currentPage).join(', ')}</h3>
+          {
+            !isLoading && !isError && hasNextPage &&
+              <button onClick={ () => { void fetchNextPage() } }>
+                Load more users
+              </button>
           }
-
-          {!loading && !error &&
-            <button onClick={() => { setCurrentPage(currentPage + 1) }}>
-              Load more users
-            </button>
+          {
+            !hasNextPage && <h2>No more users</h2>
           }
         </div>
-
-        <div ref={bottomRef} />
       </main>
     </>
   )
