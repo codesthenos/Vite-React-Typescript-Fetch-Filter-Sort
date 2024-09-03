@@ -1,41 +1,18 @@
-/* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-unsafe-enum-comparison */
 //Components
 import { useMemo, useState } from 'react'
 import { UsersTable } from './components/UsersTable.tsx'
-import type { APIResponse, User } from './types.d.ts'
+import type { User } from './types.d.ts'
 import { SortBy } from './constants.ts'
-import { useInfiniteQuery } from '@tanstack/react-query'
-
-const fetchUsers = async ({ pageParam = 1 }: { pageParam: number }) => {
-  return await fetch(`https://randomuser.me/api?seed=codesthenos&results=10&page=${pageParam}`)
-    .then(res => {
-      if (!res.ok) throw new Error('Error fetching users')
-      return res.json()
-    })
-    .then((res: APIResponse) => {
-      const currentPage = res.info.page
-      const nextPage = currentPage > 3 ? undefined : currentPage + 1
-      return {
-        users: res.results,
-        nextPage: nextPage
-      }
-    })
-}
+import { useUsers } from './hooks/useUsers.ts'
+import { TotalUsers } from './components/TotalUsers.tsx'
 
 function App () {
-  const { isLoading, isError, data, refetch, fetchNextPage, hasNextPage } = useInfiniteQuery({
-    queryKey: ['users'],
-    queryFn: fetchUsers,
-    getNextPageParam: (lastPage) => lastPage.nextPage,
-    initialPageParam: 1
-  })
-  const users = data?.pages.flatMap(page => page.users) ?? []
-  console.log(data)
+  const { isLoading, isError, users, refetch, fetchNextPage, hasNextPage } = useUsers()
 
   const [showColors, setShowColors] = useState(false)
   const [sortProperty, setSortProperty] = useState<string>(SortBy.NONE)
-  const [filterByCountryValue, setFilterByCountryValue] =useState('')
+  const [filterByCountryValue, setFilterByCountryValue] = useState('')
 
   const toggleColors = () => {
     setShowColors(!showColors)
@@ -46,13 +23,12 @@ function App () {
     setSortProperty(newSortingProperty)
   }
 
-  const handleDelete = (email: string) => {
-    // const filteredUsers = users.filter((user) => user.email !== email)
-    // setUsers(filteredUsers)
+  const handleDelete = () => {
+    // NO FUNCIONA const updatedUsers =  [...fetchedUsers].map((user) => user.email === email ? { ...user, isDeleted: true } : { ...user, isDeleted: false })
   }
 
   const handleRecover = async () => {
-    await refetch()
+    await refetch() // no tiene sentido, pero da igual
   }
 
   const filterUsers = (users: User[]) => {
@@ -85,10 +61,24 @@ function App () {
   const sortedUsers = useMemo(() => {
     return sortUsers(filteredUsers)
   }, [filteredUsers, sortProperty])
-  
+
   return (
     <>
       <h2>CODESTHENOS</h2>
+
+      <TotalUsers />
+
+      <div>
+        {
+          !isLoading && !isError && hasNextPage &&
+            <button onClick={ () => { void fetchNextPage() } }>
+              Load more users
+            </button>
+        }
+        {
+          !hasNextPage && <h2>No more users</h2>
+        }
+      </div>
 
       <header>
         <button onClick={toggleColors}>
@@ -125,18 +115,6 @@ function App () {
         {isError && <p>Fatal Error</p>}
 
         {!isError && users.length === 0 && <p>No users found</p>}
-
-        <div>
-          {
-            !isLoading && !isError && hasNextPage &&
-              <button onClick={ () => { void fetchNextPage() } }>
-                Load more users
-              </button>
-          }
-          {
-            !hasNextPage && <h2>No more users</h2>
-          }
-        </div>
       </main>
     </>
   )

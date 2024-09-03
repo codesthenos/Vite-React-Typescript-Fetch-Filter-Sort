@@ -23,6 +23,7 @@ export interface User {
   id:         ID;
   picture:    Picture;
   nat:        string;
+  isDeleted?: boolean;
 }
 
 export interface Dob {
