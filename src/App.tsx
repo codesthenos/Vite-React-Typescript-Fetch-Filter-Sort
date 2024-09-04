@@ -8,7 +8,7 @@ import { useUsers } from './hooks/useUsers.ts'
 import { TotalUsers } from './components/TotalUsers.tsx'
 
 function App () {
-  const { isLoading, isError, users, refetch, fetchNextPage, hasNextPage } = useUsers()
+  const { isLoading, isError, users, fetchNextPage, hasNextPage, recoverDeleteds } = useUsers()
 
   const [showColors, setShowColors] = useState(false)
   const [sortProperty, setSortProperty] = useState<string>(SortBy.NONE)
@@ -23,16 +23,8 @@ function App () {
     setSortProperty(newSortingProperty)
   }
 
-  const handleDelete = () => {
-    // NO FUNCIONA const updatedUsers =  [...fetchedUsers].map((user) => user.email === email ? { ...user, isDeleted: true } : { ...user, isDeleted: false })
-  }
-
-  const handleRecover = async () => {
-    await refetch() // no tiene sentido, pero da igual
-  }
-
   const filterUsers = (users: User[]) => {
-    return users.filter(user =>
+    return users.filter(user => !user.isDeleted &&
       user.location.country.toLowerCase()
         .includes(filterByCountryValue.toLowerCase())
     )
@@ -89,7 +81,7 @@ function App () {
           {sortProperty === SortBy.COUNTRY ? 'Unsort' : 'Sort by Country'}
         </button>
 
-        <button onClick={() => handleRecover}>
+        <button onClick={() => { recoverDeleteds() }}>
           Recover deleteds
         </button>
 
@@ -105,7 +97,6 @@ function App () {
           <UsersTable
             users={sortedUsers}
             showColors={showColors}
-            deleteUser={handleDelete}
             toggleSortProperty={toggleSortProperty}
           />
         }

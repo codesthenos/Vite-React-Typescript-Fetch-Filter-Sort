@@ -1,14 +1,15 @@
 import { Headers } from "../constants.ts"
+import { useUsers } from "../hooks/useUsers.ts"
 import type { User } from "../types.d.ts"
 
 interface Props {
   users: User[],
   showColors: boolean,
-  deleteUser: (email: string) => void,
   toggleSortProperty: (property: string) => void
 }
 
-export function UsersTable ({ users, showColors, deleteUser, toggleSortProperty }: Props) {
+export function UsersTable ({ users, showColors, toggleSortProperty }: Props) {
+  const { deleteUser } = useUsers()
 
   return (
     <table>
